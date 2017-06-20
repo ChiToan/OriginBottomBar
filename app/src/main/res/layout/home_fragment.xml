@@ -192,22 +192,22 @@
                     android:id="@+id/timeDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Monday 00:00"
+                    android:text="@string/lastupdate"
                     android:textAlignment="center" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/current_temp"
-                    android:textAlignment="center" />
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="@string/current_temp"-->
+                    <!--android:textAlignment="center" />-->
 
-                <TextView
-                    android:id="@+id/curtemporigin"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="18.0 &#x2103;"
-                    android:textAlignment="center"
-                    android:textAppearance="@android:style/TextAppearance.Large" />
+                <!--<TextView-->
+                    <!--android:id="@+id/curtemporigin"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="18.0 &#x2103;"-->
+                    <!--android:textAlignment="center"-->
+                    <!--android:textAppearance="@android:style/TextAppearance.Large" />-->
 
             </LinearLayout>
 

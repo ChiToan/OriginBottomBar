@@ -8,7 +8,7 @@
     <string name="minus">Minus</string>
     <string name="plus">Plus</string>
     <string name="test">Hello %1$d</string>
-    <string name="lastupdate">Last updated on:</string>
+    <string name="lastupdate">Temperature was last updated on:</string>
     <string name="nighttemp">Night temperature:</string>
     <string name="daytemp">Day temperature:</string>
 </resources>
