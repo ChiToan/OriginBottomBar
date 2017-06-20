@@ -36,7 +36,11 @@ public class FragmentWeek extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.week_fragment_activity, container, false);
 
-//
+
+
+        ViewPager viewPager = (ViewPager) view.findViewById(R.id.container);
+        /** Important: Must use the child FragmentManager or you will see side effects. */
+        viewPager.setAdapter(new MyAdapter(getChildFragmentManager()));
 //        mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
 //
 //        mViewPager = (ViewPager) view.findViewById(R.id.container);
@@ -45,15 +49,16 @@ public class FragmentWeek extends Fragment {
 
 
         tabLayout = (TabLayout) view.findViewById(R.id.tabbar);
-        container = (ViewPager) view.findViewById(R.id.container);
+        tabLayout.setupWithViewPager(viewPager);
+//        container = (ViewPager) view.findViewById(R.id.container);
 
-        tabLayout.addTab(tabLayout.newTab().setText("Monday"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tuesday"));
-        tabLayout.addTab(tabLayout.newTab().setText("Wednesday"));
-        tabLayout.addTab(tabLayout.newTab().setText("Thursday"));
-        tabLayout.addTab(tabLayout.newTab().setText("Friday"));
-        tabLayout.addTab(tabLayout.newTab().setText("Saturday"));
-        tabLayout.addTab(tabLayout.newTab().setText("Sunday"));
+//        tabLayout.addTab(tabLayout.newTab().setText("Monday"));
+//        tabLayout.addTab(tabLayout.newTab().setText("Tuesday"));
+//        tabLayout.addTab(tabLayout.newTab().setText("Wednesday"));
+//        tabLayout.addTab(tabLayout.newTab().setText("Thursday"));
+//        tabLayout.addTab(tabLayout.newTab().setText("Friday"));
+//        tabLayout.addTab(tabLayout.newTab().setText("Saturday"));
+//        tabLayout.addTab(tabLayout.newTab().setText("Sunday"));
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.add_time);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -66,6 +71,32 @@ public class FragmentWeek extends Fragment {
 
 
         return view;
+    }
+
+    public static class MyAdapter extends FragmentPagerAdapter {
+        public MyAdapter(FragmentManager fm) {
+            super(fm);
+        }
+        final int PAGE_COUNT = 7;
+        private String tabTitles[] = new String[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+
+        @Override
+        public int getCount() {
+            return PAGE_COUNT;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            Bundle args = new Bundle();
+            args.putInt(FragmentDay.POSITION_KEY, position);
+            return FragmentDay.newInstance(args);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabTitles[position];
+        }
+
     }
 //    public static class FragmentDay extends Fragment {
 //        /**
