@@ -11,4 +11,5 @@
     <string name="lastupdate">Temperature was last updated on:</string>
     <string name="nighttemp">Night temperature:</string>
     <string name="daytemp">Day temperature:</string>
+    <string name="save">Save</string>
 </resources>

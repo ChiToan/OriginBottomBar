@@ -7,12 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
 
 
 public class FragmentSettings extends Fragment {
@@ -146,12 +144,12 @@ public class FragmentSettings extends Fragment {
                         try {
                             getParam = HeatingSystem.get("currentTemperature");
 
-//									HeatingSystem.get("day");
-//									HeatingSystem.get("time");
-//									HeatingSystem.get("targetTemperature");
-//									HeatingSystem.get("dayTemperature");
-//									HeatingSystem.get("nightTemperature");
-//									HeatingSystem.get("weekProgramState");
+									HeatingSystem.get("day");
+									HeatingSystem.get("time");
+									HeatingSystem.get("targetTemperature");
+									HeatingSystem.get("dayTemperature");
+									HeatingSystem.get("nightTemperature");
+									HeatingSystem.get("weekProgramState");
 
                             data1.post(new Runnable() {
                                 @Override
@@ -188,7 +186,7 @@ public class FragmentSettings extends Fragment {
                             WeekProgram wpg = HeatingSystem.getWeekProgram();
                             // Set the week program to default
                             wpg.setDefault();
-                            /*
+
                             wpg.data.get("Monday").set(5, new Switch("day", true, "07:30"));
                             wpg.data.get("Monday").set(1, new Switch("night", true, "08:30"));
                             wpg.data.get("Monday").set(6, new Switch("day", true, "18:00"));
@@ -196,9 +194,9 @@ public class FragmentSettings extends Fragment {
                             wpg.data.get("Monday").set(8, new Switch("day", true, "18:00"));
                             boolean duplicates = wpg.duplicates(wpg.data.get("Monday"));
                             System.out.println("Duplicates found "+duplicates);
-                            */
+
                             //Upload the updated program
-                            //HeatingSystem.setWeekProgram(wpg);
+                            HeatingSystem.setWeekProgram(wpg);
 
                             data1.post(new Runnable() {
                                 @Override
