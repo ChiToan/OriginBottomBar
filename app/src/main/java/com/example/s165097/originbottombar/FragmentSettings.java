@@ -1,5 +1,7 @@
 package com.example.s165097.originbottombar;
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,14 +20,15 @@ public class FragmentSettings extends Fragment {
     Button getdata, putdata;
     TextView data1, data2;
     String getParam, oldv, newv;
-    public static int dayTempVal, nightTempVal;
+    int dayTempVal, nightTempVal;
+    public static int savedDayTempVal,savedNightTempVal;
     SeekBar seekBarDay, seekBarNight;
 
     public static FragmentSettings newInstance() {
         FragmentSettings fragmentSettings= new FragmentSettings();
         Bundle args = new Bundle();
-        args.putInt("dayTempVal", dayTempVal);
-        args.putInt("nightTempVal", nightTempVal);
+        args.putInt("savedDayTempVal", savedDayTempVal);
+        args.putInt("savedNightTempVal", savedNightTempVal);
         fragmentSettings.setArguments(args);
         return fragmentSettings;
     }
@@ -43,9 +46,14 @@ public class FragmentSettings extends Fragment {
         HeatingSystem.WEEK_PROGRAM_ADDRESS = HeatingSystem.BASE_ADDRESS + "/weekProgram";
 
         final TextView dayTemp = (TextView)view.findViewById(R.id.day_temp);
-        dayTemp.setText((dayTempVal+50)/10.0 + " \u2103");
+        dayTemp.setText((savedDayTempVal+50)/10.0 + " \u2103");
+        final TextView savedDayTemp = (TextView)view.findViewById(R.id.day_text);
+        savedDayTemp.setText(getString(R.string.daytemp) + " " + (savedDayTempVal+50)/10.0 + " \u2103");
+        final Button saveDay = (Button) view.findViewById(R.id.saveDay);
+        final Button saveNight = (Button)view.findViewById(R.id.saveNight);
         ImageButton bPlusDay = (ImageButton)view.findViewById(R.id.bPlusDay);
         ImageButton bMinusDay = (ImageButton)view.findViewById(R.id.bMinusDay);
+
         bPlusDay.setOnTouchListener(new RepeatListener(400, 100, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,29 +69,32 @@ public class FragmentSettings extends Fragment {
             }
         }));
         seekBarDay = (SeekBar)view.findViewById(R.id.seekBarDay);
-        seekBarDay.setProgress(dayTempVal);
+        seekBarDay.setProgress(savedDayTempVal);
         seekBarDay.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 dayTemp.setText((i+50)/10.0 + " \u2103");
                 seekBarDay.setProgress(i);
                 dayTempVal = i;
+                setButtonColor(saveDay,savedDayTempVal,dayTempVal);
             }
-
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 dayTempVal = seekBar.getProgress();
+                setButtonColor(saveDay,savedDayTempVal,dayTempVal);
             }
         });
 
+
         final TextView nightTemp = (TextView)view.findViewById(R.id.night_temp);
-        nightTemp.setText((nightTempVal+50)/10.0 + " \u2103");
+        nightTemp.setText((savedNightTempVal+50)/10.0 + " \u2103");
+        final TextView savedNightTemp = (TextView)view.findViewById(R.id.night_text);
+        savedNightTemp.setText(getString(R.string.nighttemp) + " " + (savedNightTempVal+50)/10.0 + " \u2103");
         ImageButton bPlusNight = (ImageButton)view.findViewById(R.id.bPlusNight);
         ImageButton bMinusNight = (ImageButton)view.findViewById(R.id.bMinusNight);
         bPlusNight.setOnTouchListener(new RepeatListener(400, 100, new View.OnClickListener() {
@@ -101,26 +112,49 @@ public class FragmentSettings extends Fragment {
             }
         }));
         seekBarNight = (SeekBar)view.findViewById(R.id.seekBarNight);
-        seekBarNight.setProgress(nightTempVal);
+        seekBarNight.setProgress(savedNightTempVal);
         seekBarNight.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 nightTemp.setText((i+50)/10.0 + " \u2103");
                 seekBarNight.setProgress(i);
                 nightTempVal = i;
+                setButtonColor(saveNight,savedNightTempVal,nightTempVal);
             }
-
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 nightTempVal = seekBar.getProgress();
+                setButtonColor(saveNight,savedNightTempVal,nightTempVal);
             }
         });
+
+        saveDay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                savedDayTempVal = dayTempVal;
+                savedDayTemp.setText(getString(R.string.daytemp) + " " + (savedDayTempVal+50)/10.0 + " \u2103");
+                setButtonColor(saveDay,savedDayTempVal,dayTempVal);
+            }
+        });
+        saveNight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                savedNightTempVal = nightTempVal;
+                savedNightTemp.setText(getString(R.string.nighttemp) + " " + (savedNightTempVal+50)/10.0 + " \u2103");
+                setButtonColor(saveNight,savedNightTempVal,nightTempVal);
+            }
+        });
+
+
+
+
+
+
 
         getdata = (Button)view.findViewById(R.id.getdata);
         putdata = (Button)view.findViewById(R.id.putdata);
@@ -220,5 +254,14 @@ public class FragmentSettings extends Fragment {
         });
 
         return view;
+    }
+
+    void setButtonColor(Button b, int saved, int progress){
+        if(saved == progress){
+            Toast.makeText(getActivity(), "Saved", Toast.LENGTH_SHORT).show();
+            b.setEnabled(false);
+        } else {
+            b.setEnabled(true);
+        }
     }
 }
