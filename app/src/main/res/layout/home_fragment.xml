@@ -1,0 +1,250 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
+    android:orientation="vertical"
+    tools:context=".FragmentHome">
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:layout_weight="1"
+        app:contentPadding="8dp">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/temp_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/current_temp"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toTopOf="@+id/curtemp"
+                app:layout_constraintLeft_toLeftOf="@+id/curtemp"
+                app:layout_constraintRight_toRightOf="@+id/curtemp" />
+
+            <TextView
+                android:id="@+id/curtemp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="18.0 &#x2103;"
+                android:textAlignment="center"
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:textColor="@color/colorAccent"
+                app:layout_constraintBottom_toTopOf="@+id/temp"
+                app:layout_constraintLeft_toLeftOf="@+id/temp"
+                app:layout_constraintRight_toRightOf="@+id/temp" />
+
+            <TextView
+                android:id="@+id/temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="21.0 &#x2103;"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="56sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.triggertrap.seekarc.SeekArc
+                android:id="@+id/curArc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="30dp"
+                app:arcColor="@color/colorPrimary"
+                app:arcWidth="4dp"
+                app:layout_constraintBottom_toBottomOf="@+id/temp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/temp"
+                app:max="250"
+                app:progress="180"
+                app:progressColor="@color/colorAccent"
+                app:progressWidth="16dp"
+                app:rotation="210"
+                app:roundEdges="true"
+                app:sweepAngle="300"
+                app:thumb="@color/noColor" />
+
+            <com.triggertrap.seekarc.SeekArc
+                android:id="@+id/seekArc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="30dp"
+                app:arcColor="@color/noColor"
+                app:layout_constraintBottom_toBottomOf="@+id/temp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/temp"
+                app:max="250"
+                app:progress="210"
+                app:progressColor="@color/noColor"
+                app:rotation="210"
+                app:sweepAngle="300"
+                app:thumb="@drawable/ic_circle_24dp" />
+
+            <ImageView
+                android:id="@+id/icon_flame"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_flame_24dp"
+                app:layout_constraintBottom_toBottomOf="@+id/seekArc"
+                app:layout_constraintLeft_toLeftOf="@+id/seekArc"
+                app:layout_constraintRight_toRightOf="@+id/seekArc"
+                app:layout_constraintTop_toBottomOf="@+id/temp" />
+
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:contentPadding="8dp">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/linearLayout_slider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/bMinus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_fullcircle_24dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:src="@drawable/ic_minus_24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <SeekBar
+                android:id="@+id/seekBar"
+                style="@android:style/Widget.DeviceDefault.SeekBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:max="250"
+                android:maxHeight="4dp"
+                android:padding="8dp"
+                android:progress="210"
+                android:progressDrawable="@drawable/progress_drawable"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/bMinus"
+                app:layout_constraintRight_toLeftOf="@+id/bPlus"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/bPlus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_fullcircle_24dp"
+                android:src="@drawable/ic_plus_24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:contentPadding="8dp">
+
+        <LinearLayout
+            android:id="@+id/linearLayout_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/timeDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Monday 00:00"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/current_temp"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:id="@+id/curtemporigin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="18.0 &#x2103;"
+                    android:textAlignment="center"
+                    android:textAppearance="@android:style/TextAppearance.Large" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"
+                android:background="@color/cardview_shadow_start_color"
+                android:orientation="vertical" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/toggle_program"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/toggle_program" />
+
+                <Switch
+                    android:id="@+id/switch_program"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:checked="true"
+                    android:splitTrack="false"
+                    tools:checked="true" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+
+</LinearLayout>

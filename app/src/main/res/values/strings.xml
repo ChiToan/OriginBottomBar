@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Thermostat</string>
+    <string name="title_home">Home</string>
+    <string name="title_program">Week Schedule</string>
+    <string name="title_settings">More</string>
+    <string name="current_temp">Current temperature:</string>
+    <string name="toggle_program">Activate week schedule</string>
+    <string name="minus">Minus</string>
+    <string name="plus">Plus</string>
+    <string name="test">Hello %1$d</string>
+    <string name="lastupdate">Last updated on:</string>
+    <string name="nighttemp">Night temperature:</string>
+    <string name="daytemp">Day temperature:</string>
+</resources>
