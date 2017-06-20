@@ -6,8 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 
 public class FragmentSettings extends Fragment {
@@ -15,6 +20,8 @@ public class FragmentSettings extends Fragment {
     Button getdata, putdata;
     TextView data1, data2;
     String getParam, oldv, newv;
+    int dayTempVal, nightTempVal;
+    SeekBar seekBarDay, seekBarNight;
 
     public static FragmentSettings newInstance() {
         return new FragmentSettings();
@@ -31,6 +38,86 @@ public class FragmentSettings extends Fragment {
 
         HeatingSystem.BASE_ADDRESS = "http://wwwis.win.tue.nl/2id40-ws/6";
         HeatingSystem.WEEK_PROGRAM_ADDRESS = HeatingSystem.BASE_ADDRESS + "/weekProgram";
+
+        final TextView dayTemp = (TextView)view.findViewById(R.id.day_temp);
+        dayTemp.setText((dayTempVal+50)/10.0 + " \u2103");
+        ImageButton bPlusDay = (ImageButton)view.findViewById(R.id.bPlusDay);
+        ImageButton bMinusDay = (ImageButton)view.findViewById(R.id.bMinusDay);
+        bPlusDay.setOnTouchListener(new RepeatListener(400, 100, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dayTempVal++;
+                seekBarDay.setProgress(dayTempVal);
+            }
+        }));
+        bMinusDay.setOnTouchListener(new RepeatListener(400, 100, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dayTempVal--;
+                seekBarDay.setProgress(dayTempVal);
+            }
+        }));
+        seekBarDay = (SeekBar)view.findViewById(R.id.seekBarDay);
+        seekBarDay.setProgress(dayTempVal);
+        seekBarDay.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                dayTemp.setText((i+50)/10.0 + " \u2103");
+                seekBarDay.setProgress(i);
+                dayTempVal = i;
+            }
+
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                dayTempVal = seekBar.getProgress();
+            }
+        });
+
+        final TextView nightTemp = (TextView)view.findViewById(R.id.night_temp);
+        nightTemp.setText((nightTempVal+50)/10.0 + " \u2103");
+        ImageButton bPlusNight = (ImageButton)view.findViewById(R.id.bPlusNight);
+        ImageButton bMinusNight = (ImageButton)view.findViewById(R.id.bMinusNight);
+        bPlusNight.setOnTouchListener(new RepeatListener(400, 100, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                nightTempVal++;
+                seekBarNight.setProgress(nightTempVal);
+            }
+        }));
+        bMinusNight.setOnTouchListener(new RepeatListener(400, 100, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                nightTempVal--;
+                seekBarNight.setProgress(nightTempVal);
+            }
+        }));
+        seekBarNight = (SeekBar)view.findViewById(R.id.seekBarNight);
+        seekBarNight.setProgress(nightTempVal);
+        seekBarNight.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                nightTemp.setText((i+50)/10.0 + " \u2103");
+                seekBarNight.setProgress(i);
+                nightTempVal = i;
+            }
+
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                nightTempVal = seekBar.getProgress();
+            }
+        });
 
         getdata = (Button)view.findViewById(R.id.getdata);
         putdata = (Button)view.findViewById(R.id.putdata);
