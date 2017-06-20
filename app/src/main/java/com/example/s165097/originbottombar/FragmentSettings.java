@@ -20,11 +20,16 @@ public class FragmentSettings extends Fragment {
     Button getdata, putdata;
     TextView data1, data2;
     String getParam, oldv, newv;
-    int dayTempVal, nightTempVal;
+    public static int dayTempVal, nightTempVal;
     SeekBar seekBarDay, seekBarNight;
 
     public static FragmentSettings newInstance() {
-        return new FragmentSettings();
+        FragmentSettings fragmentSettings= new FragmentSettings();
+        Bundle args = new Bundle();
+        args.putInt("dayTempVal", dayTempVal);
+        args.putInt("nightTempVal", nightTempVal);
+        fragmentSettings.setArguments(args);
+        return fragmentSettings;
     }
 
     @Override
