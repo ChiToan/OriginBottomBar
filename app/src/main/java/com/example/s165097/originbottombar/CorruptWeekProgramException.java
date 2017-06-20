@@ -20,4 +20,6 @@ public class CorruptWeekProgramException extends Exception {
     public CorruptWeekProgramException(Throwable cause) {
         super(cause);
     }
+
+    //hoi dit is vinz
 }
