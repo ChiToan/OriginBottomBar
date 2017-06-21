@@ -23,6 +23,9 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static java.lang.Thread.currentThread;
+import static java.lang.Thread.interrupted;
+
 public class FragmentHome extends Fragment {
 
     static int vtemp;
@@ -37,6 +40,7 @@ public class FragmentHome extends Fragment {
     TextView curtemp;
     Switch switchProgram;
     ToggleButton toggleButton;
+    ImageView flame;
 
 //    @Override
 //    public void onSaveInstanceState(Bundle outState) {
@@ -66,7 +70,6 @@ public class FragmentHome extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Handler timerHandler;
     }
 
     @Override
@@ -101,25 +104,25 @@ public class FragmentHome extends Fragment {
 //                        switchProgram.setChecked(false);
                         toggleButton.setChecked(false);
                     }
+                    double currentTemperature = (Double.parseDouble(HeatingSystem.get("currentTemperature")) * 10) - 50;
+                    ctemp = (int) currentTemperature;
+                    curArc.setProgress(ctemp);
+                    curtemp.setText((ctemp + 50) / 10.0 + " \u2103");
+                    showFlame(flame);
 
                 } catch (Exception e) {
                     System.err.println("Error from getdata " + e);
                 }
             }
         }).start();
+
         timedate = (TextView) view.findViewById(R.id.timeDate);
 
         ImageView bPlus = (ImageView) view.findViewById(R.id.bPlus);
         ImageView bMinus = (ImageView) view.findViewById(R.id.bMinus);
 
-        final ImageView flame = (ImageView) view.findViewById(R.id.icon_flame);
-        if (vtemp > ctemp) {
-            flame.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
-        } else if (vtemp < ctemp/*current temp*/) {
-            flame.setColorFilter(Color.CYAN, PorterDuff.Mode.SRC_ATOP);
-        } else if (vtemp == ctemp/*current temp*/) {
-            flame.setColorFilter(Color.LTGRAY, PorterDuff.Mode.SRC_ATOP);
-        }
+        flame = (ImageView) view.findViewById(R.id.icon_flame);
+        showFlame(flame);
 
 
 //        new Thread(new Runnable() {
@@ -130,13 +133,32 @@ public class FragmentHome extends Fragment {
 //                    ctemp = (int) currentTemperature;
 //                    curArc.setProgress(ctemp);
 //                    curtemp.setText((ctemp + 50) / 10.0 + " \u2103");
-//                    showFlame();
+//                    showFlame(flame);
 //                    timedate.setText(getResources().getString(R.string.lastupdate) + "\n" + HeatingSystem.get("day") + " " + HeatingSystem.get("time"));
 //                } catch (Exception e) {
 //                    System.err.println("Error from getdata " + e);
 //                }
 //            }
 //        }).start();
+
+        new Thread((new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while (!currentThread().isInterrupted()) {
+                        Thread.sleep(2000);
+                        double currentTemperature = (Double.parseDouble(HeatingSystem.get("currentTemperature")) * 10) - 50;
+                        ctemp = (int) currentTemperature;
+                        curArc.setProgress(ctemp);
+                        curtemp.setText((ctemp + 50) / 10.0 + " \u2103");
+                        showFlame(flame);
+                    }
+                } catch (Exception e) {
+
+
+                }
+            }
+        }));
 
 
         flame.setOnTouchListener(new RepeatListener(400, 100, new View.OnClickListener() {
@@ -145,7 +167,7 @@ public class FragmentHome extends Fragment {
                 Random r = new Random();
                 ctemp = r.nextInt(250);
                 curArc.setProgress(ctemp);
-                showFlame();
+                showFlame(flame);
                 curtemp.setText((ctemp + 50) / 10.0 + " \u2103");
             }
         }));
@@ -177,11 +199,12 @@ public class FragmentHome extends Fragment {
                 temp.setText((i + 50) / 10.0 + " \u2103");
                 seekArc.setProgress(i);
                 vtemp = i;
-                showFlame();
+                showFlame(flame);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
+                            Thread.sleep(500);
                             double targetTemp = (vtemp + 50) / 10.0;
                             HeatingSystem.put("targetTemperature", Double.toString(targetTemp));
                         } catch (Exception e) {
@@ -201,7 +224,7 @@ public class FragmentHome extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 vtemp = seekBar.getProgress();
-                showFlame();
+                showFlame(flame);
             }
         });
         bPlus.setOnTouchListener(new RepeatListener(400, 100, new View.OnClickListener() {
@@ -244,18 +267,38 @@ public class FragmentHome extends Fragment {
         return view;
     }
 
-    void showFlame() {
-        ImageView flame = (ImageView) getView().findViewById(R.id.icon_flame);
+    void showFlame(ImageView f) {
 
         if (vtemp > ctemp) {
-            flame.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
+            f.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
         }
         if (vtemp < ctemp) {
-            flame.setColorFilter(Color.CYAN, PorterDuff.Mode.SRC_ATOP);
+            f.setColorFilter(Color.CYAN, PorterDuff.Mode.SRC_ATOP);
         }
         if (vtemp == ctemp) {
-            flame.setColorFilter(Color.LTGRAY, PorterDuff.Mode.SRC_ATOP);
+            f.setColorFilter(Color.LTGRAY, PorterDuff.Mode.SRC_ATOP);
         }
+    }
+    void updateCurrentTemp(){
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    double currentTemperature = (Double.parseDouble(HeatingSystem.get("currentTemperature")) * 10) - 50;
+                    ctemp = (int) currentTemperature;
+                    curArc.setProgress(ctemp);
+                    curtemp.setText((ctemp + 50) / 10.0 + " \u2103");
+                    showFlame(flame);
+                    timedate.setText(getResources().getString(R.string.lastupdate) + "\n" + HeatingSystem.get("day") + " " + HeatingSystem.get("time"));
+
+
+                }catch (Exception e){
+
+                }
+            }
+        });
+
     }
 
 
