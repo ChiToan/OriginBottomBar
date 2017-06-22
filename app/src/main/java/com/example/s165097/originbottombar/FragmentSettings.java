@@ -22,15 +22,11 @@ public class FragmentSettings extends Fragment {
     TextView data1, data2;
     String getParam, oldv, newv;
     int dayTempVal, nightTempVal;
-    public static int savedDayTempVal, savedNightTempVal;
+    int savedDayTempVal, savedNightTempVal;
     SeekBar seekBarDay, seekBarNight;
 
     public static FragmentSettings newInstance() {
         FragmentSettings fragmentSettings = new FragmentSettings();
-        Bundle args = new Bundle();
-        args.putInt("savedDayTempVal", savedDayTempVal);
-        args.putInt("savedNightTempVal", savedNightTempVal);
-        fragmentSettings.setArguments(args);
         return fragmentSettings;
     }
 
@@ -61,38 +57,29 @@ public class FragmentSettings extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    savedDayTempVal = (int) (Double.parseDouble(HeatingSystem.get("dayTemperature")) * 10) - 50;
-                    seekBarDay.setProgress(savedDayTempVal);
-
-                } catch (Exception e) {
-//                    Toast.makeText(getActivity(), "Connection Failed", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }).start();
-
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-            }
-        });
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                savedDayTemp.setText(getString(R.string.daytemp));
-                savedNightTemp.setText(getString(R.string.nighttemp));
 
                 try {
                     savedDayTempVal = (int) (Double.parseDouble(HeatingSystem.get("dayTemperature")) * 10) - 50;
                     savedNightTempVal = (int) (Double.parseDouble(HeatingSystem.get("nightTemperature")) * 10) - 50;
-                    seekBarNight.setProgress(savedNightTempVal);
-                    seekBarDay.setProgress(savedDayTempVal);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            seekBarNight.setProgress(savedNightTempVal);
+                            seekBarDay.setProgress(savedDayTempVal);
+                            savedDayTemp.setText(getString(R.string.daytemp) + " " + (dayTempVal + 50) / 10.0 + " \u2103");
+                            savedNightTemp.setText(getString(R.string.nighttemp) + " " +  (nightTempVal+50)/10.0 + " \u2103");
+                        }
+                    });
 
 
                 } catch (Exception e) {
-                    Toast.makeText(getActivity(), "Connection Failed", Toast.LENGTH_SHORT).show();
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            Toast.makeText(getActivity(), "Connection Failed", Toast.LENGTH_SHORT).show();
+//
+//                        }
+//                    });
                 }
             }
         }).start();
@@ -178,9 +165,14 @@ public class FragmentSettings extends Fragment {
                     public void run() {
                         try {
                             HeatingSystem.put("dayTemperature", Double.toString((dayTempVal + 50) / 10.0));
-                            savedDayTemp.setText(getString(R.string.daytemp) + " " + (dayTempVal + 50) / 10.0 + " \u2103");
-                            setButtonColor(saveDay,1,1);
-                            savedDayTempVal = dayTempVal;
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    savedDayTemp.setText(getString(R.string.daytemp) + " " + (dayTempVal + 50) / 10.0 + " \u2103");
+                                    setButtonColor(saveDay,1,1);
+                                    savedDayTempVal = dayTempVal;
+                                }
+                            });
 //                            Toast.makeText(getActivity(), "Saved", Toast.LENGTH_SHORT).show();
 
                         } catch (Exception e) {
@@ -199,9 +191,14 @@ public class FragmentSettings extends Fragment {
                     public void run() {
                         try {
                             HeatingSystem.put("nightTemperature", Double.toString((nightTempVal + 50) / 10.0));
-                            savedNightTemp.setText(getString(R.string.nighttemp) + " " + (nightTempVal + 50) / 10.0 + " \u2103");
-                            setButtonColor(saveNight,1,1);
-                            savedNightTempVal = nightTempVal;
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    savedNightTemp.setText(getString(R.string.nighttemp) + " " + (nightTempVal + 50) / 10.0 + " \u2103");
+                                    setButtonColor(saveNight,1,1);
+                                    savedNightTempVal = nightTempVal;
+                                }
+                            });
 //                            Toast.makeText(getActivity(), "Saved", Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
 //                            Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();

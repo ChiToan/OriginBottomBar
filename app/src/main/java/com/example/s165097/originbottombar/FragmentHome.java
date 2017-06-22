@@ -28,8 +28,8 @@ import static java.lang.Thread.interrupted;
 
 public class FragmentHome extends Fragment {
 
-    static int vtemp;
-    static int ctemp;
+    int vtemp;
+    int ctemp;
 
 
     TextView temp;
@@ -60,10 +60,6 @@ public class FragmentHome extends Fragment {
     public static FragmentHome newInstance() {
         FragmentHome fragmentHome = new FragmentHome();
         //save the temp values:
-        Bundle args = new Bundle();
-        args.putInt("vtemp", vtemp);
-        args.putInt("ctemp", ctemp);
-        fragmentHome.setArguments(args);
         return fragmentHome;
     }
 
@@ -124,6 +120,12 @@ public class FragmentHome extends Fragment {
 
                 } catch (Exception e) {
                     System.err.println("Error from getdata " + e);
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            Toast.makeText(getActivity(), "Connection Failed", Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
                 }
             }
         }).start();
@@ -133,7 +135,7 @@ public class FragmentHome extends Fragment {
             public void run() {
                 try {
                     while (!currentThread().isInterrupted()) {
-                        Thread.sleep(175);
+                        Thread.sleep(1000);
                         double currentTemperature = (Double.parseDouble(HeatingSystem.get("currentTemperature")) * 10) - 50;
                         ctemp = (int) currentTemperature;
                         final String getTimeDate = (HeatingSystem.get("day") + " " + HeatingSystem.get("time"));
