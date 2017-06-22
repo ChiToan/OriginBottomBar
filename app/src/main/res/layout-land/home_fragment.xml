@@ -181,22 +181,22 @@
                         android:layout_margin="8dp"
                         android:text="@string/toggle_program" />
 
-                    <ToggleButton
-                        android:id="@+id/toggleButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="ToggleButton"
-                        android:layout_below="@id/toggle_program"
-                        android:layout_centerHorizontal="true" />
-
-                    <!--<Switch-->
-                        <!--android:id="@+id/switch_program"-->
+                    <!--<ToggleButton-->
+                        <!--android:id="@+id/toggleButton"-->
                         <!--android:layout_width="wrap_content"-->
                         <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_below="@+id/toggle_program"-->
-                        <!--android:layout_centerHorizontal="true"-->
-                        <!--android:layout_margin="8dp"-->
-                        <!--android:splitTrack="false"/>-->
+                        <!--android:text="ToggleButton"-->
+                        <!--android:layout_below="@id/toggle_program"-->
+                        <!--android:layout_centerHorizontal="true" />-->
+
+                    <Switch
+                        android:id="@+id/switch_program"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/toggle_program"
+                        android:layout_centerHorizontal="true"
+                        android:layout_margin="8dp"
+                        android:splitTrack="false"/>
 
                 </RelativeLayout>
 

@@ -85,8 +85,9 @@ public class FragmentHome extends Fragment {
 //        curArc.setProgress(ctemp);
         curtemp = (TextView) view.findViewById(R.id.curtemp);
 //        curtemp.setText((ctemp + 50) / 10.0 + " \u2103");
-//        switchProgram = (Switch) view.findViewById(R.id.switch_program);
-        toggleButton = (ToggleButton) view.findViewById(R.id.toggleButton);
+        switchProgram = (Switch) view.findViewById(R.id.switch_program);
+//        toggleButton = (ToggleButton) view.findViewById(R.id.toggleButton);
+        timedate = (TextView) view.findViewById(R.id.timeDate);
 
         //initial values from server dit zorgt wel voor blank fragment
         new Thread(new Runnable() {
@@ -95,20 +96,31 @@ public class FragmentHome extends Fragment {
                 try {
                     double targetTemperature = (Double.parseDouble(HeatingSystem.get("targetTemperature")) * 10) - 50;
                     vtemp = (int) targetTemperature;
-                    seekBar.setProgress(vtemp);
-                    temp.setText((vtemp + 50) / 10.0 + " \u2103");
-                    if (HeatingSystem.get("weekProgramState").equals("on")) {
-                        toggleButton.setChecked(true);
-//                        switchProgram.setChecked(true);
-                    } else if (HeatingSystem.get("weekProgramState").equals("off")) {
-//                        switchProgram.setChecked(false);
-                        toggleButton.setChecked(false);
-                    }
                     double currentTemperature = (Double.parseDouble(HeatingSystem.get("currentTemperature")) * 10) - 50;
                     ctemp = (int) currentTemperature;
-                    curArc.setProgress(ctemp);
-                    curtemp.setText((ctemp + 50) / 10.0 + " \u2103");
-                    showFlame(flame);
+                    final String weekProgramState = HeatingSystem.get("weekProgramState");
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                seekBar.setProgress(vtemp);
+                                temp.setText((vtemp + 50) / 10.0 + " \u2103");
+                                if (weekProgramState.equals("on")) {
+//                                    toggleButton.setChecked(true);
+                                    switchProgram.setChecked(true);
+                                } else if (weekProgramState.equals("off")) {
+                                    switchProgram.setChecked(false);
+//                                    toggleButton.setChecked(false);
+                                }
+                                curArc.setProgress(ctemp);
+                                curtemp.setText((ctemp + 50) / 10.0 + " \u2103");
+                                showFlame(flame);
+
+                            } catch (Exception e) {
+
+                            }
+                        }
+                    });
 
                 } catch (Exception e) {
                     System.err.println("Error from getdata " + e);
@@ -116,7 +128,31 @@ public class FragmentHome extends Fragment {
             }
         }).start();
 
-        timedate = (TextView) view.findViewById(R.id.timeDate);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while (!currentThread().isInterrupted()) {
+                        Thread.sleep(175);
+                        double currentTemperature = (Double.parseDouble(HeatingSystem.get("currentTemperature")) * 10) - 50;
+                        ctemp = (int) currentTemperature;
+                        final String getTimeDate = (HeatingSystem.get("day") + " " + HeatingSystem.get("time"));
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                curArc.setProgress(ctemp);
+                                curtemp.setText((ctemp + 50) / 10.0 + " \u2103");
+                                showFlame(flame);
+                                timedate.setText(getResources().getString(R.string.lastupdate) + "\n" + getTimeDate);
+                            }
+                        });
+                    }
+                } catch (Exception e) {
+
+                }
+            }
+        }).start();
+
 
         ImageView bPlus = (ImageView) view.findViewById(R.id.bPlus);
         ImageView bMinus = (ImageView) view.findViewById(R.id.bMinus);
@@ -140,25 +176,6 @@ public class FragmentHome extends Fragment {
 //                }
 //            }
 //        }).start();
-
-        new Thread((new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    while (!currentThread().isInterrupted()) {
-                        Thread.sleep(2000);
-                        double currentTemperature = (Double.parseDouble(HeatingSystem.get("currentTemperature")) * 10) - 50;
-                        ctemp = (int) currentTemperature;
-                        curArc.setProgress(ctemp);
-                        curtemp.setText((ctemp + 50) / 10.0 + " \u2103");
-                        showFlame(flame);
-                    }
-                } catch (Exception e) {
-
-
-                }
-            }
-        }));
 
 
         flame.setOnTouchListener(new RepeatListener(400, 100, new View.OnClickListener() {
@@ -242,7 +259,7 @@ public class FragmentHome extends Fragment {
             }
         }));
 
-        toggleButton.setOnCheckedChangeListener(new ToggleButton.OnCheckedChangeListener() {
+        switchProgram.setOnCheckedChangeListener(new ToggleButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
                 new Thread(new Runnable() {
@@ -279,12 +296,13 @@ public class FragmentHome extends Fragment {
             f.setColorFilter(Color.LTGRAY, PorterDuff.Mode.SRC_ATOP);
         }
     }
-    void updateCurrentTemp(){
+
+    void updateCurrentTemp() {
 
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                try{
+                try {
                     double currentTemperature = (Double.parseDouble(HeatingSystem.get("currentTemperature")) * 10) - 50;
                     ctemp = (int) currentTemperature;
                     curArc.setProgress(ctemp);
@@ -293,7 +311,7 @@ public class FragmentHome extends Fragment {
                     timedate.setText(getResources().getString(R.string.lastupdate) + "\n" + HeatingSystem.get("day") + " " + HeatingSystem.get("time"));
 
 
-                }catch (Exception e){
+                } catch (Exception e) {
 
                 }
             }
