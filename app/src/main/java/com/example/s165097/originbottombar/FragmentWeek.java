@@ -15,12 +15,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 
+import java.util.ArrayList;
+
 
 public class FragmentWeek extends Fragment {
 //    SectionsPagerAdapter mSectionsPagerAdapter;
 //    ViewPager mViewPager;
     TabLayout tabLayout;
     ViewPager container;
+    private ArrayAdapter<String> listAdapter;
+    ArrayList<String> lItems;
 
 
     public static FragmentWeek newInstance() {
@@ -36,6 +40,9 @@ public class FragmentWeek extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.week_fragment_activity, container, false);
 
+        lItems = new ArrayList<String>();
+        listAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.week_fragment_activity, R.id.textView);
+        listAdapter.addAll(lItems);
 
 
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.container);
@@ -64,9 +71,6 @@ public class FragmentWeek extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Snackbar.make(view, "Dikzak", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
                 newSwitch(view);
             }
         });
@@ -108,34 +112,36 @@ public class FragmentWeek extends Fragment {
         final Dialog d = new Dialog(this.getActivity());
         d.setTitle("New Switch");
         d.setContentView(R.layout.add_switch_fragment);
-//        final android.widget.Switch swDayNight = (android.widget.Switch) d.findViewById(R.id.swDayNight);
-//
+        final android.widget.Switch dayNightSwitch = (android.widget.Switch) d.findViewById(R.id.dayNightSwitch);
+
         final TimePicker picker = (TimePicker) d.findViewById(R.id.timePicker);
         Button btnSave = (Button) d.findViewById(R.id.saveButton);
-//        Button btnDelete = (Button) d.findViewById(R.id.btnDelete);
-//        btnDelete.setWidth(0); // make it essentially invisible.
-//
-//        btnSave.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String strTime = String.valueOf(picker.getHour()) + ":" + String.valueOf(picker.getMinute());
-//                String swType = (swDayNight.isChecked()) ? "night" : "day";
-//                if(fiveOfEither().equals(swType)){
-//                    Snackbar.make(fView, "Failed to save: Only 5 switches of each type allowed!", Snackbar.LENGTH_LONG)
-//                            .setAction("", null).show();
-//                    d.dismiss();
-//                    return;
-//                }
-//                String item = "Switch to " + swType + " temperature\nat " + GeneralHelper.correctTime(strTime);
-//
-//                lItems.add(item);
-//                listAdapter.clear();
-//                listAdapter.addAll(lItems);
-//                listAdapter.notifyDataSetChanged();
-//                updateAndSaveSchedule();
-//                d.dismiss();
-//            }
-//        });
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String strTime = String.valueOf(picker.getHour()) + ":" + String.valueOf(picker.getMinute());
+                String swType = (dayNightSwitch.isChecked()) ? "night" : "day";
+
+                String item = "Switch to " + swType + " temperature\nat " + strTime;
+
+                String testString = "";
+
+
+                lItems.add(item);
+                listAdapter.clear();
+                listAdapter.addAll(lItems);
+                listAdapter.notifyDataSetChanged();
+
+                for (String s:lItems){
+                    testString = testString+ "" +  s;
+                }
+
+                Toast.makeText(getContext(), testString, Toast.LENGTH_SHORT).show();
+                //updateAndSaveSchedule();
+                d.dismiss();
+            }
+        });
         picker.setIs24HourView(true);
         picker.setHour(10);
         picker.setMinute(10);
