@@ -1,5 +1,6 @@
 package com.example.s165097.originbottombar;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,8 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.*;
 
 
 public class FragmentWeek extends Fragment {
@@ -64,10 +64,14 @@ public class FragmentWeek extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Snackbar.make(view, "Dikzak", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                newSwitch(view);
             }
         });
+
+
 
 
         return view;
@@ -97,6 +101,46 @@ public class FragmentWeek extends Fragment {
             return tabTitles[position];
         }
 
+    }
+
+    private void newSwitch(View view){
+        final View fView = view;
+        final Dialog d = new Dialog(this.getActivity());
+        d.setTitle("New Switch");
+        d.setContentView(R.layout.add_switch_fragment);
+//        final android.widget.Switch swDayNight = (android.widget.Switch) d.findViewById(R.id.swDayNight);
+//
+        final TimePicker picker = (TimePicker) d.findViewById(R.id.timePicker);
+        Button btnSave = (Button) d.findViewById(R.id.saveButton);
+//        Button btnDelete = (Button) d.findViewById(R.id.btnDelete);
+//        btnDelete.setWidth(0); // make it essentially invisible.
+//
+//        btnSave.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String strTime = String.valueOf(picker.getHour()) + ":" + String.valueOf(picker.getMinute());
+//                String swType = (swDayNight.isChecked()) ? "night" : "day";
+//                if(fiveOfEither().equals(swType)){
+//                    Snackbar.make(fView, "Failed to save: Only 5 switches of each type allowed!", Snackbar.LENGTH_LONG)
+//                            .setAction("", null).show();
+//                    d.dismiss();
+//                    return;
+//                }
+//                String item = "Switch to " + swType + " temperature\nat " + GeneralHelper.correctTime(strTime);
+//
+//                lItems.add(item);
+//                listAdapter.clear();
+//                listAdapter.addAll(lItems);
+//                listAdapter.notifyDataSetChanged();
+//                updateAndSaveSchedule();
+//                d.dismiss();
+//            }
+//        });
+        picker.setIs24HourView(true);
+        picker.setHour(10);
+        picker.setMinute(10);
+
+        d.show();
     }
 //    public static class FragmentDay extends Fragment {
 //        /**

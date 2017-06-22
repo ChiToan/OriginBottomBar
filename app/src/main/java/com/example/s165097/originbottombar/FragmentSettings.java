@@ -66,6 +66,8 @@ public class FragmentSettings extends Fragment {
                         public void run() {
                             seekBarNight.setProgress(savedNightTempVal);
                             seekBarDay.setProgress(savedDayTempVal);
+                            dayTemp.setText((savedDayTempVal + 50) / 10.0 + " \u2103");
+                            nightTemp.setText((savedNightTempVal + 50) / 10.0 + " \u2103");
                             savedDayTemp.setText(getString(R.string.daytemp) + " " + (dayTempVal + 50) / 10.0 + " \u2103");
                             savedNightTemp.setText(getString(R.string.nighttemp) + " " +  (nightTempVal+50)/10.0 + " \u2103");
                         }

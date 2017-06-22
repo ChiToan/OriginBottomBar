@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <TimePicker
         android:id="@+id/timePicker"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Switch
         android:id="@+id/dayNightSwitch"
@@ -15,28 +22,33 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/timePicker"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="18dp"
-        android:switchMinWidth="50dp" />
+        android:layout_marginTop="16dp"
+        android:switchMinWidth="50dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timePicker" />
 
     <TextView
-        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="0dp"
+        android:text="@string/day"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        app:layout_constraintRight_toLeftOf="@+id/dayNightSwitch"
+        app:layout_constraintTop_toTopOf="@+id/dayNightSwitch" />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/dayNightSwitch"
-        android:layout_marginEnd="19dp"
-        android:layout_toStartOf="@+id/dayNightSwitch"
-        android:text="Day"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/dayNightSwitch"
-        android:layout_marginStart="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="0dp"
         android:layout_toEndOf="@+id/dayNightSwitch"
-        android:text="Night"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+        android:text="@string/night"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        app:layout_constraintLeft_toRightOf="@+id/dayNightSwitch"
+        app:layout_constraintTop_toTopOf="@+id/dayNightSwitch" />
 
     <Button
         android:id="@+id/saveButton"
@@ -44,6 +56,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/dayNightSwitch"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="14dp"
-        android:text="@string/save" />
-</RelativeLayout>
+        android:layout_marginTop="16dp"
+        android:text="@string/save"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dayNightSwitch" />
+</android.support.constraint.ConstraintLayout>

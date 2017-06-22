@@ -12,4 +12,6 @@
     <string name="nighttemp">Night temperature:</string>
     <string name="daytemp">Day temperature:</string>
     <string name="save">Save</string>
+    <string name="day">Day</string>
+    <string name="night">Night</string>
 </resources>
