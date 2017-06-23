@@ -77,13 +77,6 @@ public class FragmentSettings extends Fragment {
 
 
                 } catch (Exception e) {
-//                    getActivity().runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            Toast.makeText(getActivity(), "Connection Failed", Toast.LENGTH_SHORT).show();
-//
-//                        }
-//                    });
                 }
             }
         }).start();
@@ -177,10 +170,8 @@ public class FragmentSettings extends Fragment {
                                     savedDayTempVal = dayTempVal;
                                 }
                             });
-//                            Toast.makeText(getActivity(), "Saved", Toast.LENGTH_SHORT).show();
 
                         } catch (Exception e) {
-//                            Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }).start();
@@ -203,9 +194,7 @@ public class FragmentSettings extends Fragment {
                                     savedNightTempVal = nightTempVal;
                                 }
                             });
-//                            Toast.makeText(getActivity(), "Saved", Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
-//                            Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }).start();

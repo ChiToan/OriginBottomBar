@@ -31,21 +31,6 @@ public class FragmentHome extends Fragment {
     Switch switchProgram;
     ImageView flame;
 
-//    @Override
-//    public void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        outState.putInt("vtemp", vtemp);
-//        outState.putInt("ctemp", ctemp);
-//    }
-//
-//    @Override
-//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState);
-//        vtemp = savedInstanceState.getInt("vtemp");
-//        ctemp = savedInstanceState.getInt("ctemp");
-//        showFlame();
-//    }
-
     public static FragmentHome newInstance() {
         FragmentHome fragmentHome = new FragmentHome();
         //save the temp values:
@@ -152,33 +137,6 @@ public class FragmentHome extends Fragment {
         showFlame(flame);
 
 
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    double currentTemperature = (Double.parseDouble(HeatingSystem.get("currentTemperature")) * 10) - 50;
-//                    ctemp = (int) currentTemperature;
-//                    curArc.setProgress(ctemp);
-//                    curtemp.setText((ctemp + 50) / 10.0 + " \u2103");
-//                    showFlame(flame);
-//                    timedate.setText(getResources().getString(R.string.lastupdate) + "\n" + HeatingSystem.get("day") + " " + HeatingSystem.get("time"));
-//                } catch (Exception e) {
-//                    System.err.println("Error from getdata " + e);
-//                }
-//            }
-//        }).start();
-
-
-        flame.setOnTouchListener(new RepeatListener(400, 100, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Random r = new Random();
-                ctemp = r.nextInt(250);
-                curArc.setProgress(ctemp);
-                showFlame(flame);
-                curtemp.setText((ctemp + 50) / 10.0 + " \u2103");
-            }
-        }));
 
         seekArc = (SeekArc) view.findViewById(R.id.seekArc);
         seekArc.setProgress(vtemp);
@@ -286,27 +244,6 @@ public class FragmentHome extends Fragment {
         }
     }
 
-    void updateCurrentTemp() {
-
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    double currentTemperature = (Double.parseDouble(HeatingSystem.get("currentTemperature")) * 10) - 50;
-                    ctemp = (int) currentTemperature;
-                    curArc.setProgress(ctemp);
-                    curtemp.setText((ctemp + 50) / 10.0 + " \u2103");
-                    showFlame(flame);
-                    timedate.setText(getResources().getString(R.string.lastupdate) + HeatingSystem.get("day") + " " + HeatingSystem.get("time"));
-
-
-                } catch (Exception e) {
-
-                }
-            }
-        });
-
-    }
 
 
 }

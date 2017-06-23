@@ -17,10 +17,7 @@ import java.util.ArrayList;
 
 
 public class FragmentWeek extends Fragment {
-    //    SectionsPagerAdapter mSectionsPagerAdapter;
-//    ViewPager mViewPager;
     TabLayout tabLayout;
-    ViewPager container;
     private ArrayAdapter<String> listAdapter;
     ArrayList<Switch> switchList = new ArrayList<>();
     ArrayList<String> lItems;

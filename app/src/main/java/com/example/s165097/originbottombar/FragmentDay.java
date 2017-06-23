@@ -69,12 +69,11 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
                 try {
                     WeekProgram wpg = HeatingSystem.getWeekProgram();
                     rawList = wpg.data.get(tabTitles[position]);
-//                    switchesList.clear();
-                    for (int i = 0; i < 10; i++) {
+                    for (int i = 9; i > -1; i--) {
                         if (rawList.get(i).getState()) {
                             switchesList.add("Switch to " + rawList.get(i).getType() + " temperature at " + rawList.get(i).getTime());
                         } else {
-                            i = 10;
+                            i = -1;
                         }
                     }
 
@@ -127,9 +126,8 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
                     public void run() {
                         try {
                             WeekProgram wpg = HeatingSystem.getWeekProgram();
-                            String swType = wpg.data.get(tabTitles[daypos]).get(listpos).getType();
-                            wpg.data.get(tabTitles[daypos]).set(listpos, new Switch(swType, true, strTime));
-//                            wpg.AddSwitch(hour, minute, swType, tabTitles[pos]);
+                            String swType = wpg.data.get(tabTitles[daypos]).get(9-listpos).getType();
+                            wpg.data.get(tabTitles[daypos]).set(9-listpos, new Switch(swType, true, strTime));
                             HeatingSystem.setWeekProgram(wpg);
                         } catch (Exception e) {
                             System.err.println("Error from getdata " + e);
@@ -147,9 +145,8 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
                     public void run() {
                         try {
                             WeekProgram wpg = HeatingSystem.getWeekProgram();
-                            String swType = wpg.data.get(tabTitles[daypos]).get(listpos).getType();
-                            wpg.data.get(tabTitles[daypos]).set(listpos, new Switch(swType, false, "00:00"));
-//                            wpg.AddSwitch(hour, minute, swType, tabTitles[pos]);
+                            String swType = wpg.data.get(tabTitles[daypos]).get(9-listpos).getType();
+                            wpg.data.get(tabTitles[daypos]).set(9-listpos, new Switch(swType, false, "00:00"));
                             HeatingSystem.setWeekProgram(wpg);
                         } catch (Exception e) {
                             System.err.println("Error from getdata " + e);
