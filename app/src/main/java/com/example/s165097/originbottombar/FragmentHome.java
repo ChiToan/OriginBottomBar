@@ -1,13 +1,9 @@
 package com.example.s165097.originbottombar;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +12,9 @@ import android.widget.Switch;
 
 import com.triggertrap.seekarc.SeekArc;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static java.lang.Thread.currentThread;
-import static java.lang.Thread.interrupted;
 
 public class FragmentHome extends Fragment {
 
@@ -39,7 +29,6 @@ public class FragmentHome extends Fragment {
     SeekArc curArc;
     TextView curtemp;
     Switch switchProgram;
-    ToggleButton toggleButton;
     ImageView flame;
 
 //    @Override
