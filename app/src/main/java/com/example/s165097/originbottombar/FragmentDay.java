@@ -22,7 +22,8 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
      */
 
     int position;
-    ArrayList<Switch> switchList = new ArrayList<>();
+    ArrayList<Switch> rawList = new ArrayList<>();
+    ArrayList<String> switchesList = new ArrayList<>();
     private ArrayAdapter<String> listAdapter;
     static String tabTitles[] = new String[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
 
@@ -49,35 +50,36 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
         HeatingSystem.WEEK_PROGRAM_ADDRESS = HeatingSystem.BASE_ADDRESS + "/weekProgram";
         position = getArguments().getInt(POSITION_KEY);
         final View view = inflater.inflate(R.layout.week_fragment_content, container, false);
-        final TextView textView = (TextView) view.findViewById(R.id.section_label);
-        textView.setText("Dikzakken staan op dag: " + Integer.toString(position));
-
+        TextView sectionLabel = (TextView) view.findViewById(R.id.section_label);
 
         final ListView addedTimes = (ListView) view.findViewById(R.id.added_times);
+
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try{
                     WeekProgram wpg = HeatingSystem.getWeekProgram();
-                    switchList = wpg.data.get(tabTitles[position]);
-                    final String test = (Boolean.toString(switchList.get(0).getState()) );
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            textView.setText(test);
+                    rawList = wpg.data.get(tabTitles[position]);
+
+                    for (int i=9; i>-1; i--){
+                        if(rawList.get(i).getState()){
+                            switchesList.add("Switch to " + rawList.get(i).getType() + " temperature at " + rawList.get(i).getTime());
                         }
-                    });
+                    }
+
 
                 }catch (Exception e){
                     System.err.println("Error from getdata " + e);
                 }
             }
         }).start();
-
-
-
-
-
+        if( !switchesList.isEmpty()) {
+            listAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.day_row_view, R.id.textView);
+            listAdapter.addAll(switchesList);
+            addedTimes.setAdapter(listAdapter);
+        } else{
+           sectionLabel.setText("No switches are set");
+        }
         return view;
     }
 
