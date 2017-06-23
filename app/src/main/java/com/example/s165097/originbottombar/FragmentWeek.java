@@ -15,16 +15,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 
+import java.net.ConnectException;
 import java.util.ArrayList;
 
 
 public class FragmentWeek extends Fragment {
-//    SectionsPagerAdapter mSectionsPagerAdapter;
+    //    SectionsPagerAdapter mSectionsPagerAdapter;
 //    ViewPager mViewPager;
     TabLayout tabLayout;
     ViewPager container;
     private ArrayAdapter<String> listAdapter;
+    ArrayList<Switch> switchList = new ArrayList<>();
     ArrayList<String> lItems;
+    static String tabTitles[] = new String[]{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
 
 
     public static FragmentWeek newInstance() {
@@ -40,12 +43,16 @@ public class FragmentWeek extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.week_fragment_activity, container, false);
 
+
+        HeatingSystem.BASE_ADDRESS = "http://wwwis.win.tue.nl/2id40-ws/6";
+        HeatingSystem.WEEK_PROGRAM_ADDRESS = HeatingSystem.BASE_ADDRESS + "/weekProgram";
+
         lItems = new ArrayList<String>();
-        listAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.week_fragment_activity, R.id.textView);
+        listAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.week_fragment_activity);
         listAdapter.addAll(lItems);
 
 
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.container);
+        final ViewPager viewPager = (ViewPager) view.findViewById(R.id.container);
         /** Important: Must use the child FragmentManager or you will see side effects. */
         viewPager.setAdapter(new MyAdapter(getChildFragmentManager()));
 //        mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
@@ -57,6 +64,7 @@ public class FragmentWeek extends Fragment {
 
         tabLayout = (TabLayout) view.findViewById(R.id.tabbar);
         tabLayout.setupWithViewPager(viewPager);
+        final int position = viewPager.getCurrentItem();
 //        container = (ViewPager) view.findViewById(R.id.container);
 
 //        tabLayout.addTab(tabLayout.newTab().setText("Monday"));
@@ -71,22 +79,39 @@ public class FragmentWeek extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                newSwitch(view);
+//                final int[] freepos = {0};
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        try {
+//                            WeekProgram wpg = HeatingSystem.getWeekProgram();
+//                            switchList = wpg.data.get(tabTitles[position]);
+//                            if (!switchList.get(0).getState()) {
+//                                freepos[0] = 1;
+//                            }
+//                        } catch (Exception e) {
+//                            System.err.println("Error from getdata " + e);
+//                        }
+//                    }
+//                });
+//                if (freepos[0] == 1) {
+                    newSwitch(view, position);
+//                } else {
+//                    Toast.makeText(getActivity(), getResources().getString(R.string.noswitch), Toast.LENGTH_SHORT).show();
+//                }
             }
         });
-
-
 
 
         return view;
     }
 
     public static class MyAdapter extends FragmentPagerAdapter {
-        public MyAdapter(FragmentManager fm) {
+        private MyAdapter(FragmentManager fm) {
             super(fm);
         }
+
         final int PAGE_COUNT = 7;
-        private String tabTitles[] = new String[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
 
         @Override
         public int getCount() {
@@ -107,7 +132,7 @@ public class FragmentWeek extends Fragment {
 
     }
 
-    private void newSwitch(View view){
+    private void newSwitch(View view, final int pos) {
         final View fView = view;
         final Dialog d = new Dialog(this.getActivity());
         d.setTitle("New Switch");
@@ -120,8 +145,9 @@ public class FragmentWeek extends Fragment {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String strTime = String.valueOf(picker.getHour()) + ":" + String.valueOf(picker.getMinute());
-                String swType = (dayNightSwitch.isChecked()) ? "night" : "day";
+                final String strTime = String.valueOf(picker.getHour()) + ":" + String.valueOf(picker.getMinute());
+                final String swType = (dayNightSwitch.isChecked()) ? "night" : "day";
+                final int[] freepos = {0};
 
                 String item = "Switch to " + swType + " temperature\nat " + strTime;
 
@@ -133,12 +159,59 @@ public class FragmentWeek extends Fragment {
                 listAdapter.addAll(lItems);
                 listAdapter.notifyDataSetChanged();
 
-                for (String s:lItems){
-                    testString = testString+ "" +  s;
+                for (String s : lItems) {
+                    testString = testString + " " + s;
                 }
+                final int[] switchpos = new int[1];
 
-                Toast.makeText(getContext(), testString, Toast.LENGTH_SHORT).show();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            WeekProgram wpg = HeatingSystem.getWeekProgram();
+                            switchList = wpg.data.get(tabTitles[pos]);
+                            for (int i = 0; i < 6; i++) {
+                                if (switchList.get(i).getType().equals("night") && !switchList.get(i).getState() && swType.equals("night")) {
+                                    switchpos[0] = i;
+                                    freepos[0] = 1;
+                                    i = 6;
+                                } else if (switchList.get(i).getType().equals("day") && !switchList.get(i).getState() && swType.equals("day")) {
+                                    switchpos[0] = i;
+                                    freepos[0] = 1;
+                                    i = 6;
+                                }
+                            }
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (freepos[0] == 0) {
+                                        Toast.makeText(getActivity(), "No " + swType + " switches left", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(getActivity(), getResources().getString(R.string.saved), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        } catch (Exception e) {
+                            System.err.println("Error from getdata " + e);
+                        }
+                    }
+                }).start();
+
+//                Toast.makeText(getContext(), testString, Toast.LENGTH_SHORT).show();
                 //updateAndSaveSchedule();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            WeekProgram wpg = HeatingSystem.getWeekProgram();
+                            wpg.data.get(tabTitles[pos]).set(switchpos[0], new Switch(swType, true, strTime));
+//                            wpg.AddSwitch(hour, minute, swType, tabTitles[pos]);
+                            HeatingSystem.setWeekProgram(wpg);
+                        } catch (Exception e) {
+                            System.err.println("Error from getdata " + e);
+                        }
+                    }
+                }).start();
                 d.dismiss();
             }
         });
@@ -148,68 +221,5 @@ public class FragmentWeek extends Fragment {
 
         d.show();
     }
-//    public static class FragmentDay extends Fragment {
-//        /**
-//         * The fragment argument representing the section number for this
-//         * fragment.
-//         */
-//        private static final String ARG_SECTION_NUMBER = "section_number";
-//
-//        public FragmentDay() {
-//        }
-//
-//        /**
-//         * Returns a new instance of this fragment for the given section
-//         * number.
-//         */
-//        public static FragmentDay newInstance(int sectionNumber) {
-//            FragmentDay fragment = new FragmentDay();
-//            Bundle args = new Bundle();
-//            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-//            fragment.setArguments(args);
-//            return fragment;
-//        }
-//
-//        @Override
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                                 Bundle savedInstanceState) {
-//            View rootView = inflater.inflate(R.layout.week_fragment_content, container, false);
-//            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-//            textView.setText(getString(R.string.test, getArguments().getInt(ARG_SECTION_NUMBER)));
-//            return rootView;
-//        }
-//    }
-//    private class SectionsPagerAdapter extends FragmentPagerAdapter {
-//
-//        SectionsPagerAdapter(FragmentManager fm) {
-//            super(fm);
-//        }
-//
-//        @Override
-//        public Fragment getItem(int position) {
-//            // getItem is called to instantiate the fragment for the given page.
-//            // Return a PlaceholderFragment (defined as a static inner class below).
-//            return FragmentDay.newInstance(position + 1);
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            // Show 3 total pages.
-//            return 3;
-//        }
-//
-//        @Override
-//        public CharSequence getPageTitle(int position) {
-//            switch (position) {
-//                case 0:
-//                    return "SECTION 1";
-//                case 1:
-//                    return "SECTION 2";
-//                case 2:
-//                    return "SECTION 3";
-//            }
-//            return null;
-//        }
-//    }
 
 }

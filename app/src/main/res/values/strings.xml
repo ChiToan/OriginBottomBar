@@ -8,10 +8,13 @@
     <string name="minus">Minus</string>
     <string name="plus">Plus</string>
     <string name="test">Hello %1$d</string>
-    <string name="lastupdate">Temperature was last updated on:</string>
+    <string name="lastupdate">Temperature was last updated on:\n</string>
     <string name="nighttemp">Night temperature:</string>
     <string name="daytemp">Day temperature:</string>
     <string name="save">Save</string>
+    <string name="saved">Saved</string>
+    <string name="failed">Failed</string>
     <string name="day">Day</string>
     <string name="night">Night</string>
+    <string name="noswitch">No switches left</string>
 </resources>

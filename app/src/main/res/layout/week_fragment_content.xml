@@ -13,7 +13,6 @@
     <ListView
         android:id="@+id/added_times"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:listSelector="@drawable/card_background" />
+        android:layout_height="wrap_content"/>
 
 </RelativeLayout>

@@ -16,53 +16,64 @@
         android:layout_margin="8dp"
         app:contentPadding="8dp">
 
-        <TableLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center">
+            android:layout_height="match_parent">
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <TableLayout
+                android:layout_width="312dp"
+                android:layout_height="49dp"
+                android:gravity="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <Button
-                    android:id="@+id/getdata"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="GET Data" />
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <Button
-                    android:id="@+id/putdata"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="PUT Data" />
-            </TableRow>
+                    <Button
+                        android:id="@+id/getdata"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="GET Data" />
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                    <Button
+                        android:id="@+id/putdata"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="PUT Data" />
+                </TableRow>
 
-                <TextView
-                    android:id="@+id/data1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="getParam"
-                    android:textAlignment="center" />
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/data2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="old value"
-                    android:textAlignment="center" />
+                    <TextView
+                        android:id="@+id/data1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="getParam"
+                        android:textAlignment="center" />
 
-            </TableRow>
+                    <TextView
+                        android:id="@+id/data2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="old value"
+                        android:textAlignment="center" />
 
-        </TableLayout>
+                </TableRow>
+
+            </TableLayout>
+
+        </android.support.constraint.ConstraintLayout>
+
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView

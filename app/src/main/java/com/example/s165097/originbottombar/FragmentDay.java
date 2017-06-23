@@ -22,9 +22,9 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
      */
 
     int position;
-    public FloatingActionButton fabAdd;
-    ArrayList<String> lItems = new ArrayList<String>();
+    ArrayList<Switch> switchList = new ArrayList<>();
     private ArrayAdapter<String> listAdapter;
+    static String tabTitles[] = new String[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
 
     public static final String POSITION_KEY = "FragmentPositionKey";
     private static final String ARG_SECTION_NUMBER = "section_number";
@@ -45,13 +45,35 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-
+        HeatingSystem.BASE_ADDRESS = "http://wwwis.win.tue.nl/2id40-ws/6";
+        HeatingSystem.WEEK_PROGRAM_ADDRESS = HeatingSystem.BASE_ADDRESS + "/weekProgram";
         position = getArguments().getInt(POSITION_KEY);
-        View view = inflater.inflate(R.layout.week_fragment_content, container, false);
-        TextView textView = (TextView) view.findViewById(R.id.section_label);
+        final View view = inflater.inflate(R.layout.week_fragment_content, container, false);
+        final TextView textView = (TextView) view.findViewById(R.id.section_label);
         textView.setText("Dikzakken staan op dag: " + Integer.toString(position));
 
+
         final ListView addedTimes = (ListView) view.findViewById(R.id.added_times);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    WeekProgram wpg = HeatingSystem.getWeekProgram();
+                    switchList = wpg.data.get(tabTitles[position]);
+                    final String test = (Boolean.toString(switchList.get(0).getState()) );
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            textView.setText(test);
+                        }
+                    });
+
+                }catch (Exception e){
+                    System.err.println("Error from getdata " + e);
+                }
+            }
+        }).start();
+
 
 
 
@@ -68,4 +90,5 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
     }
+
 }

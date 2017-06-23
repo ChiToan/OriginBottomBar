@@ -70,6 +70,8 @@ public class FragmentSettings extends Fragment {
                             nightTemp.setText((savedNightTempVal + 50) / 10.0 + " \u2103");
                             savedDayTemp.setText(getString(R.string.daytemp) + " " + (dayTempVal + 50) / 10.0 + " \u2103");
                             savedNightTemp.setText(getString(R.string.nighttemp) + " " +  (nightTempVal+50)/10.0 + " \u2103");
+                            setButtonColor(saveDay,1,1);
+                            setButtonColor(saveNight,1,1);
                         }
                     });
 
@@ -224,7 +226,7 @@ public class FragmentSettings extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(getActivity(), "Dikzak", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "got it", Toast.LENGTH_SHORT).show();
                 // TODO Auto-generated method stub
                 new Thread(new Runnable() {
                     @Override

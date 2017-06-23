@@ -145,7 +145,7 @@ public class FragmentHome extends Fragment {
                                 curArc.setProgress(ctemp);
                                 curtemp.setText((ctemp + 50) / 10.0 + " \u2103");
                                 showFlame(flame);
-                                timedate.setText(getResources().getString(R.string.lastupdate) + "\n" + getTimeDate);
+                                timedate.setText(getResources().getString(R.string.lastupdate) + getTimeDate);
                             }
                         });
                     }
@@ -228,7 +228,6 @@ public class FragmentHome extends Fragment {
                             HeatingSystem.put("targetTemperature", Double.toString(targetTemp));
                         } catch (Exception e) {
                             System.err.println("Error from getdata " + e);
-                            Toast.makeText(getActivity(), "Saved", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }).start();
@@ -275,7 +274,6 @@ public class FragmentHome extends Fragment {
                             }
                         } catch (Exception e) {
                             System.err.println("Error from getdata " + e);
-                            Toast.makeText(getActivity(), "Saved", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }).start();
@@ -310,7 +308,7 @@ public class FragmentHome extends Fragment {
                     curArc.setProgress(ctemp);
                     curtemp.setText((ctemp + 50) / 10.0 + " \u2103");
                     showFlame(flame);
-                    timedate.setText(getResources().getString(R.string.lastupdate) + "\n" + HeatingSystem.get("day") + " " + HeatingSystem.get("time"));
+                    timedate.setText(getResources().getString(R.string.lastupdate) + HeatingSystem.get("day") + " " + HeatingSystem.get("time"));
 
 
                 } catch (Exception e) {
