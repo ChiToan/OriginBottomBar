@@ -14,8 +14,10 @@
     <string name="save">Save</string>
     <string name="saved">Saved</string>
     <string name="remove">Remove</string>
+    <string name="removed">Removed</string>
     <string name="failed">Failed</string>
     <string name="day">Day</string>
     <string name="night">Night</string>
     <string name="noswitch">No switches left</string>
+    <string name="noswitchset">No switches are set</string>
 </resources>

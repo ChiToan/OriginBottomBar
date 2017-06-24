@@ -126,7 +126,6 @@ public class FragmentWeek extends Fragment {
     }
 
     private void newSwitch(View view, final int pos) {
-        final View fView = view;
         final Dialog d = new Dialog(this.getActivity());
 
         d.setTitle("New Switch");
@@ -154,11 +153,9 @@ public class FragmentWeek extends Fragment {
                             WeekProgram wpg = HeatingSystem.getWeekProgram();
                             switchList = wpg.data.get(tabTitles[pos]);
                             for (int i = 0; i < 6; i++) {
-                                if (switchList.get(i).getType().equals("night") && !switchList.get(i).getState() && swType.equals("night")) {
-                                    switchpos[0] = i;
-                                    freepos[0] = 1;
-                                    i = 6;
-                                } else if (switchList.get(i).getType().equals("day") && !switchList.get(i).getState() && swType.equals("day")) {
+                                if (!switchList.get(i).getState() && (
+                                        (swType.equals("day") && switchList.get(i).getType().equals("day")) ||
+                                                (swType.equals("night") && switchList.get(i).getType().equals("night")))) {
                                     switchpos[0] = i;
                                     freepos[0] = 1;
                                     i = 6;
@@ -175,7 +172,7 @@ public class FragmentWeek extends Fragment {
                                 }
                             });
                         } catch (Exception e) {
-                            System.err.println("Error from getdata " + e);
+                            System.err.println("Error from getdata available " + e);
                         }
                     }
                 }).start();
@@ -187,6 +184,26 @@ public class FragmentWeek extends Fragment {
                     public void run() {
                         try {
                             WeekProgram wpg = HeatingSystem.getWeekProgram();
+                            switchList = wpg.data.get(tabTitles[pos]);
+                            for (int i = 0; i < 6; i++) {
+                                if (!switchList.get(i).getState() && (
+                                        (swType.equals("day") && switchList.get(i).getType().equals("day")) ||
+                                                (swType.equals("night") && switchList.get(i).getType().equals("night")))) {
+                                    switchpos[0] = i;
+                                    freepos[0] = 1;
+                                    i = 6;
+                                }
+                            }
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (freepos[0] == 0) {
+                                        Toast.makeText(getActivity(), "No " + swType + " switches left", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(getActivity(), getResources().getString(R.string.saved), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                             wpg.data.get(tabTitles[pos]).set(switchpos[0], new Switch(swType, true, strTime));
                             HeatingSystem.setWeekProgram(wpg);
                         } catch (Exception e) {

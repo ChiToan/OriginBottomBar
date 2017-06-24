@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import static java.lang.Thread.currentThread;
+
 
 public class FragmentDay extends Fragment implements ListView.OnItemClickListener, View.OnClickListener {
     /**
@@ -53,43 +55,100 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
         HeatingSystem.WEEK_PROGRAM_ADDRESS = HeatingSystem.BASE_ADDRESS + "/weekProgram";
         position = getArguments().getInt(POSITION_KEY);
         final View view = inflater.inflate(R.layout.week_fragment_content, container, false);
-        TextView sectionLabel = (TextView) view.findViewById(R.id.section_label);
+        final TextView sectionLabel = (TextView) view.findViewById(R.id.section_label);
 
         final ListView addedTimes = (ListView) view.findViewById(R.id.added_times);
         addedTimes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                editSwitch(view, position, position);
+            public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
+                editSwitch(view, pos, position);
             }
         });
-
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    WeekProgram wpg = HeatingSystem.getWeekProgram();
-                    rawList = wpg.data.get(tabTitles[position]);
-                    for (int i = 9; i > -1; i--) {
-                        if (rawList.get(i).getState()) {
-                            switchesList.add("Switch to " + rawList.get(i).getType() + " temperature at " + rawList.get(i).getTime());
-                        } else {
-                            i = -1;
+//                    while (!currentThread().isInterrupted()) {
+//                        Thread.sleep(500);
+                        WeekProgram wpg = HeatingSystem.getWeekProgram();
+                        rawList = wpg.data.get(tabTitles[position]);
+                        for (int i = 9; i > -1; i--) {
+                            if (rawList.get(i).getState()) {
+                                switchesList.add(rawList.get(i).getTime() + "\n" + rawList.get(i).getType());
+                            } else {
+                                i = -1;
+                            }
                         }
-                    }
+                        if (!switchesList.isEmpty()) {
+                            listAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item, R.id.tvSwitchTitle);
+                            listAdapter.addAll(switchesList);
+                            switchesList.clear();
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    addedTimes.setAdapter(listAdapter);
+                                    sectionLabel.setVisibility(View.GONE);
+                                }
+                            });
+                        } else {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    sectionLabel.setVisibility(View.VISIBLE);
+                                }
+                            });
+                        }
 
                 } catch (Exception e) {
                     System.err.println("Error from getdata " + e);
                 }
             }
         }).start();
-        if (!switchesList.isEmpty()) {
-            listAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.day_row_view, R.id.textView);
-            listAdapter.addAll(switchesList);
-            addedTimes.setAdapter(listAdapter);
-            switchesList.clear();
-        } else {
-            sectionLabel.setText("No switches are set");
-        }
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    WeekProgram wpg = HeatingSystem.getWeekProgram();
+//                    rawList = wpg.data.get(tabTitles[position]);
+//                    for (int i = 9; i > -1; i--) {
+//                        if (rawList.get(i).getState()) {
+//                            switchesList.add(rawList.get(i).getTime() + "\n" + rawList.get(i).getType());
+//                        } else {
+//                            i = -1;
+//                        }
+//                    }
+//                } catch (Exception e) {
+//                    System.err.println("Error from getdata " + e);
+//                }
+//                if (!switchesList.isEmpty()) {
+//                    listAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item, R.id.tvSwitchTitle);
+//                    listAdapter.addAll(switchesList);
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            addedTimes.setAdapter(listAdapter);
+//                        }
+//                    });
+//                    switchesList.clear();
+//                }else {
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            sectionLabel.setText("No switches are set");
+//                        }
+//                    });
+//                }
+//            }
+//        }).start();
+
+//        if (!switchesList.isEmpty()) {
+//            listAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.list_item, R.id.tvSwitchTitle);
+//            listAdapter.addAll(switchesList);
+//            addedTimes.setAdapter(listAdapter);
+//            switchesList.clear();
+//        } else {
+//            sectionLabel.setText("No switches are set");
+//        }
         return view;
     }
 
@@ -126,9 +185,16 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
                     public void run() {
                         try {
                             WeekProgram wpg = HeatingSystem.getWeekProgram();
-                            String swType = wpg.data.get(tabTitles[daypos]).get(9-listpos).getType();
-                            wpg.data.get(tabTitles[daypos]).set(9-listpos, new Switch(swType, true, strTime));
+                            String swType = wpg.data.get(tabTitles[daypos]).get(9 - listpos).getType();
+                            wpg.data.get(tabTitles[daypos]).set(9 - listpos, new Switch(swType, true, strTime));
                             HeatingSystem.setWeekProgram(wpg);
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getActivity(), Integer.toString(9 - listpos) + tabTitles[daypos], Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), getResources().getString(R.string.saved), Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         } catch (Exception e) {
                             System.err.println("Error from getdata " + e);
                         }
@@ -145,9 +211,16 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
                     public void run() {
                         try {
                             WeekProgram wpg = HeatingSystem.getWeekProgram();
-                            String swType = wpg.data.get(tabTitles[daypos]).get(9-listpos).getType();
-                            wpg.data.get(tabTitles[daypos]).set(9-listpos, new Switch(swType, false, "00:00"));
+                            String swType = wpg.data.get(tabTitles[daypos]).get(9 - listpos).getType();
+                            wpg.data.get(tabTitles[daypos]).set(9 - listpos, new Switch(swType, false, "00:00"));
                             HeatingSystem.setWeekProgram(wpg);
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getActivity(), Integer.toString(9 - listpos) + tabTitles[daypos], Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), getResources().getString(R.string.removed), Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         } catch (Exception e) {
                             System.err.println("Error from getdata " + e);
                         }
