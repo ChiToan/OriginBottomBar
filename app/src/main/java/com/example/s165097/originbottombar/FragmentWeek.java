@@ -42,7 +42,6 @@ public class FragmentWeek extends Fragment {
         HeatingSystem.WEEK_PROGRAM_ADDRESS = HeatingSystem.BASE_ADDRESS + "/weekProgram";
 
 
-
         final ViewPager viewPager = (ViewPager) view.findViewById(R.id.container);
         final MyAdapter testAdapter = new MyAdapter(getChildFragmentManager());
         viewPager.setAdapter(testAdapter);
@@ -61,16 +60,16 @@ public class FragmentWeek extends Fragment {
                         try {
                             WeekProgram wpg = HeatingSystem.getWeekProgram();
                             switchList = wpg.data.get(tabTitles[viewPager.getCurrentItem()]);
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (switchList.get(0).getState()) {
-                                            Toast.makeText(getActivity(), "No switches left for " + tabTitles[viewPager.getCurrentItem()], Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            newSwitch(testAdapter, viewPager.getCurrentItem());
-                                        }
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (switchList.get(0).getState()) {
+                                        Toast.makeText(getActivity(), "No switches left for " + tabTitles[viewPager.getCurrentItem()], Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        newSwitch(testAdapter, viewPager.getCurrentItem());
                                     }
-                                });
+                                }
+                            });
 
                         } catch (Exception e) {
                             System.err.println("Error from fab " + e);
@@ -102,8 +101,9 @@ public class FragmentWeek extends Fragment {
             args.putInt(FragmentDay.POSITION_KEY, position);
             return FragmentDay.newInstance(args);
         }
+
         @Override
-        public int getItemPosition(Object object){
+        public int getItemPosition(Object object) {
             return POSITION_NONE;
         }
 
@@ -113,7 +113,6 @@ public class FragmentWeek extends Fragment {
         }
 
     }
-
 
 
     private void newSwitch(final MyAdapter adapter, final int pos) {

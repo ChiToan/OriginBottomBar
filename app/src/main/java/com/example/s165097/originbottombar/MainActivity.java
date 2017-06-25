@@ -47,11 +47,11 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.content);
-        if(currentFragment == null){
-        transaction.replace(R.id.content, FragmentHome.newInstance());}
+        if (currentFragment == null) {
+            transaction.replace(R.id.content, FragmentHome.newInstance());
+        }
         transaction.commit();
     }
-
 
 
 }

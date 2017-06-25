@@ -114,7 +114,7 @@ public class FragmentHome extends Fragment {
                         Thread.sleep(1000);
                         ctemp = (int) (Double.parseDouble(HeatingSystem.get("currentTemperature")) * 10) - 50;
                         final String getTimeDate = (HeatingSystem.get("day") + " " + HeatingSystem.get("time"));
-                        vtemp = (int) (Double.parseDouble(HeatingSystem.get("targetTemperature"))*10)-50;
+                        vtemp = (int) (Double.parseDouble(HeatingSystem.get("targetTemperature")) * 10) - 50;
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -135,7 +135,6 @@ public class FragmentHome extends Fragment {
 
         ImageView bPlus = (ImageView) view.findViewById(R.id.bPlus);
         ImageView bMinus = (ImageView) view.findViewById(R.id.bMinus);
-
 
 
         seekArc = (SeekArc) view.findViewById(R.id.seekArc);
@@ -255,7 +254,6 @@ public class FragmentHome extends Fragment {
 //            f.setColorFilter(Color.LTGRAY, PorterDuff.Mode.SRC_ATOP);
         }
     }
-
 
 
 }
