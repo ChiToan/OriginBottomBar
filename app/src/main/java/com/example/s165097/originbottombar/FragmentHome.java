@@ -86,7 +86,7 @@ public class FragmentHome extends Fragment {
                                 }
                                 curArc.setProgress(ctemp);
                                 curtemp.setText((ctemp + 50) / 10.0 + " \u2103");
-                                showFlame(flame);
+                                showFlame();
 
                             } catch (Exception e) {
 
@@ -120,7 +120,7 @@ public class FragmentHome extends Fragment {
                             public void run() {
                                 curArc.setProgress(ctemp);
                                 curtemp.setText((ctemp + 50) / 10.0 + " \u2103");
-                                showFlame(flame);
+                                showFlame();
                                 timedate.setText(getResources().getString(R.string.lastupdate) + getTimeDate);
                                 seekBar.setProgress(vtemp);
                             }
@@ -135,9 +135,6 @@ public class FragmentHome extends Fragment {
 
         ImageView bPlus = (ImageView) view.findViewById(R.id.bPlus);
         ImageView bMinus = (ImageView) view.findViewById(R.id.bMinus);
-
-        flame = (ImageView) view.findViewById(R.id.icon_flame);
-        showFlame(flame);
 
 
 
@@ -168,7 +165,7 @@ public class FragmentHome extends Fragment {
                 temp.setText((i + 50) / 10.0 + " \u2103");
                 seekArc.setProgress(i);
                 vtemp = i;
-                showFlame(flame);
+                showFlame();
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -192,7 +189,7 @@ public class FragmentHome extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 vtemp = seekBar.getProgress();
-                showFlame(flame);
+                showFlame();
             }
         });
         bPlus.setOnTouchListener(new RepeatListener(400, 100, new View.OnClickListener() {
@@ -234,16 +231,28 @@ public class FragmentHome extends Fragment {
         return view;
     }
 
-    void showFlame(ImageView f) {
+    void showFlame() {
+        ImageView flame = (ImageView) getView().findViewById(R.id.icon_flame);
+        ImageView snow = (ImageView) getView().findViewById(R.id.icon_snow);
+        ImageView temp = (ImageView) getView().findViewById(R.id.icon_temp);
 
         if (vtemp > ctemp) {
-            f.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
+//            f.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
+            flame.setVisibility(View.VISIBLE);
+            snow.setVisibility(View.INVISIBLE);
+            temp.setVisibility(View.INVISIBLE);
         }
         if (vtemp < ctemp) {
-            f.setColorFilter(Color.CYAN, PorterDuff.Mode.SRC_ATOP);
+            flame.setVisibility(View.INVISIBLE);
+            snow.setVisibility(View.VISIBLE);
+            temp.setVisibility(View.INVISIBLE);
+//            f.setColorFilter(Color.CYAN, PorterDuff.Mode.SRC_ATOP);
         }
         if (vtemp == ctemp) {
-            f.setColorFilter(Color.LTGRAY, PorterDuff.Mode.SRC_ATOP);
+            flame.setVisibility(View.INVISIBLE);
+            snow.setVisibility(View.INVISIBLE);
+            temp.setVisibility(View.VISIBLE);
+//            f.setColorFilter(Color.LTGRAY, PorterDuff.Mode.SRC_ATOP);
         }
     }
 

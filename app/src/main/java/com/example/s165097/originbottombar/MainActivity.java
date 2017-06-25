@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         Fragment selectedFragment = null;
-                        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.content);
                         switch (item.getItemId()) {
                             case R.id.navigation_home:
                                 selectedFragment = FragmentHome.newInstance();
@@ -46,7 +45,10 @@ public class MainActivity extends AppCompatActivity {
 
         //Manually displaying the first fragment - one time only
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.content, FragmentHome.newInstance());
+
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.content);
+        if(currentFragment == null){
+        transaction.replace(R.id.content, FragmentHome.newInstance());}
         transaction.commit();
     }
 
