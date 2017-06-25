@@ -1,9 +1,7 @@
 package com.example.s165097.originbottombar;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +16,12 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
 
 public class FragmentDay extends Fragment implements ListView.OnItemClickListener, View.OnClickListener {
+    public static final String POSITION_KEY = "FragmentPositionKey";
+    static String tabTitles[] = new String[]{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -30,10 +31,8 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
     ArrayList<Switch> rawList = new ArrayList<>();
     ArrayList<String> switchesList = new ArrayList<>();
     private ArrayAdapter<String> listAdapter;
-    static String tabTitles[] = new String[]{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
-
-    public static final String POSITION_KEY = "FragmentPositionKey";
-    private static final String ARG_SECTION_NUMBER = "section_number";
+    ListView addedTimes;
+    TextView sectionLabel;
 
     public FragmentDay() {
     }
@@ -55,17 +54,18 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
         HeatingSystem.WEEK_PROGRAM_ADDRESS = HeatingSystem.BASE_ADDRESS + "/weekProgram";
         position = getArguments().getInt(POSITION_KEY);
         final View view = inflater.inflate(R.layout.week_fragment_content, container, false);
-        final TextView sectionLabel = (TextView) view.findViewById(R.id.section_label);
+        sectionLabel = (TextView) view.findViewById(R.id.section_label);
 
         listAdapter = new ArrayAdapter<>(getActivity(), R.layout.list_item, R.id.tvSwitchTitle);
 
-        final ListView addedTimes = (ListView) view.findViewById(R.id.added_times);
+        addedTimes = (ListView) view.findViewById(R.id.added_times);
         addedTimes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
-                editSwitch(listAdapter, pos, position);
+                editSwitch(pos, position);
             }
         });
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -77,10 +77,10 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
                     switchesList.clear();
                     for (int i = 9; i > -1; i--) {
                         if (rawList.get(i).getState()) {
-                            if (rawList.get(i).getType().equals("day")){
-                                switchesList.add(rawList.get(i).getTime() +"\t\t\t\t\t\t\t"+ getEmojiByUnicode(0x2600) + "\t\t\tDay");
+                            if (rawList.get(i).getType().equals("day")) {
+                                switchesList.add(rawList.get(i).getTime() + "\t\t\t\t\t\t\t" + getEmojiByUnicode(0x2600) + "\t\t\tDay");
                             } else {
-                                switchesList.add(rawList.get(i).getTime() +"\t\t\t\t\t\t\t" + getEmojiByUnicode(0x1F319) + "\t\t\tNight");
+                                switchesList.add(rawList.get(i).getTime() + "\t\t\t\t\t\t\t" + getEmojiByUnicode(0x1F319) + "\t\t\tNight");
                             }
 
                         } else {
@@ -124,7 +124,7 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
     }
 
-    private void editSwitch(final ArrayAdapter adapter, final int listpos, final int daypos) {
+    private void editSwitch(final int listpos, final int daypos) {
         final Dialog d = new Dialog(this.getActivity());
 
         d.setTitle("Edit Switch");
@@ -139,9 +139,6 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
             public void onClick(View v) {
                 final String strTime = String.format("%02d", picker.getHour()) + ":" + String.valueOf(picker.getMinute());
 
-
-//                Toast.makeText(getContext(), testString, Toast.LENGTH_SHORT).show();
-                //updateAndSaveSchedule();
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -150,13 +147,18 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
                             String swType = wpg.data.get(tabTitles[daypos]).get(10 - switchesList.size() + listpos).getType();
                             wpg.data.get(tabTitles[daypos]).set(10 - switchesList.size() + listpos, new Switch(swType, true, strTime));
                             HeatingSystem.setWeekProgram(wpg);
-
+                            switchesList.remove(listpos);
+                            if (swType.equals("day")){
+                                switchesList.add(strTime + "\t\t\t\t\t\t\t" + getEmojiByUnicode(0x2600) + "\t\t\tDay");
+                            } else {
+                                switchesList.add(strTime + "\t\t\t\t\t\t\t" + getEmojiByUnicode(0x1F319) + "\t\t\tNight");
+                            }
+                            Collections.sort(switchesList);
+                            Thread.sleep(500);
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-//                                    Toast.makeText(getActivity(), Integer.toString(9 - listpos) + tabTitles[daypos], Toast.LENGTH_SHORT).show();
                                     Toast.makeText(getActivity(), getResources().getString(R.string.saved), Toast.LENGTH_SHORT).show();
-                                    adapter.notifyDataSetChanged();
                                 }
                             });
                         } catch (Exception e) {
@@ -164,6 +166,13 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
                         }
                     }
                 }).start();
+                listAdapter.clear();
+                try {
+                    TimeUnit.MILLISECONDS.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                listAdapter.addAll(switchesList);
                 d.dismiss();
             }
         });
@@ -178,12 +187,13 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
                             String swType = wpg.data.get(tabTitles[daypos]).get(10 - switchesList.size() + listpos).getType();
                             wpg.data.get(tabTitles[daypos]).set(10 - switchesList.size() + listpos, new Switch(swType, false, "00:00"));
                             HeatingSystem.setWeekProgram(wpg);
+                            switchesList.remove(listpos);
+                            Collections.sort(switchesList);
+                            Thread.sleep(500);
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-//                                    Toast.makeText(getActivity(), Integer.toString(9 - listpos) + tabTitles[daypos], Toast.LENGTH_SHORT).show();
                                     Toast.makeText(getActivity(), getResources().getString(R.string.removed), Toast.LENGTH_SHORT).show();
-                                    adapter.notifyDataSetChanged();
                                 }
                             });
                         } catch (Exception e) {
@@ -191,6 +201,17 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
                         }
                     }
                 }).start();
+                listAdapter.clear();
+                try {
+                    TimeUnit.MILLISECONDS.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                listAdapter.addAll(switchesList);
+                if (switchesList.isEmpty()){
+                    sectionLabel.setVisibility(View.VISIBLE);
+                }
+
                 d.dismiss();
             }
         });
@@ -201,7 +222,8 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
 
         d.show();
     }
-    public String getEmojiByUnicode(int unicode){
+
+    public String getEmojiByUnicode(int unicode) {
         return new String(Character.toChars(unicode));
     }
 }

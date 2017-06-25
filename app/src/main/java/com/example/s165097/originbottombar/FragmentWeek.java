@@ -17,12 +17,13 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import static java.lang.Thread.currentThread;
+
 
 public class FragmentWeek extends Fragment {
+    static String tabTitles[] = new String[]{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
     TabLayout tabLayout;
     ArrayList<Switch> switchList = new ArrayList<>();
-    static String tabTitles[] = new String[]{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
-
 
     public static FragmentWeek newInstance() {
         return new FragmentWeek();
@@ -41,14 +42,31 @@ public class FragmentWeek extends Fragment {
         HeatingSystem.BASE_ADDRESS = "http://wwwis.win.tue.nl/2id40-ws/6";
         HeatingSystem.WEEK_PROGRAM_ADDRESS = HeatingSystem.BASE_ADDRESS + "/weekProgram";
 
-
         final ViewPager viewPager = (ViewPager) view.findViewById(R.id.container);
         final MyAdapter testAdapter = new MyAdapter(getChildFragmentManager());
         viewPager.setAdapter(testAdapter);
-//        viewPager.setAdapter(new MyAdapter(getChildFragmentManager()));
 
         tabLayout = (TabLayout) view.findViewById(R.id.tabbar);
         tabLayout.setupWithViewPager(viewPager);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while (!currentThread().isInterrupted()) {
+//                        Thread.sleep(1000);
+//                        getActivity().runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                testAdapter.notifyDataSetChanged();
+//                            }
+//                        });
+                    }
+                } catch (Exception e) {
+
+                }
+            }
+        }).start();
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.add_time);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -82,38 +100,6 @@ public class FragmentWeek extends Fragment {
 
         return view;
     }
-
-    private static class MyAdapter extends FragmentPagerAdapter {
-        private MyAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        final int PAGE_COUNT = 7;
-
-        @Override
-        public int getCount() {
-            return PAGE_COUNT;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            Bundle args = new Bundle();
-            args.putInt(FragmentDay.POSITION_KEY, position);
-            return FragmentDay.newInstance(args);
-        }
-
-        @Override
-        public int getItemPosition(Object object) {
-            return POSITION_NONE;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return tabTitles[position];
-        }
-
-    }
-
 
     private void newSwitch(final MyAdapter adapter, final int pos) {
         final Dialog d = new Dialog(this.getActivity());
@@ -186,6 +172,37 @@ public class FragmentWeek extends Fragment {
         picker.setMinute(10);
 
         d.show();
+    }
+
+    private static class MyAdapter extends FragmentPagerAdapter {
+        final int PAGE_COUNT = 7;
+
+        private MyAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public int getCount() {
+            return PAGE_COUNT;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            Bundle args = new Bundle();
+            args.putInt(FragmentDay.POSITION_KEY, position);
+            return FragmentDay.newInstance(args);
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabTitles[position];
+        }
+
     }
 
 }

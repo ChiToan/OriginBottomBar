@@ -1,6 +1,5 @@
 /**
  * @author HTI students, Spring 2013
- *
  */
 package com.example.s165097.originbottombar;
 

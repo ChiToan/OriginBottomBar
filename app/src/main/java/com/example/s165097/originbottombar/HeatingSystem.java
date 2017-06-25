@@ -1,6 +1,5 @@
 /**
  * @author HTI students, Spring 2013, adjusted by N.Stash
- *
  */
 package com.example.s165097.originbottombar;
 
@@ -25,9 +24,9 @@ import java.util.Locale;
 
 public class HeatingSystem {
 
+    private final static int TIME_OUT = 10000; // in milliseconds.
     public static String BASE_ADDRESS = "";
     public static String WEEK_PROGRAM_ADDRESS = "";
-    private final static int TIME_OUT = 10000; // in milliseconds.
 
     /**
      * Retrieving weekProgram
@@ -98,6 +97,58 @@ public class HeatingSystem {
     }
 
     /**
+     * Uploading the updated or adjusted week program to the server
+     * @param wpg
+     */
+    public static void setWeekProgram(WeekProgram wpg) {
+        DataOutputStream out = null;
+        try {
+            String xml_output = wpg.toXML();
+            System.out.println("Link: " + HeatingSystem.WEEK_PROGRAM_ADDRESS);
+            HttpURLConnection connect = getHttpConnection(
+                    HeatingSystem.WEEK_PROGRAM_ADDRESS, "PUT");
+
+            out = new DataOutputStream(connect.getOutputStream());
+            out.writeBytes(xml_output);
+            out.flush();
+
+            // Check the response Code it may be the case that we retrieve an
+            // error, because the XML format is wrong.
+            String response = connect.getResponseMessage();
+            int responseCode = connect.getResponseCode();
+            System.out.println("Http Response: " + response);
+
+            System.out.println("Http Response Code: " + responseCode);
+
+            if (responseCode != 200) {
+                InputStream err = connect.getErrorStream();
+                BufferedReader err_read = new BufferedReader(
+                        new InputStreamReader(err));
+                String errInput;
+                while ((errInput = err_read.readLine()) != null) {
+                    System.out.println("ErrorStream: " + errInput);
+                }
+                err.close(); // Close the Error Stream.
+                err_read.close();
+            }
+            // if(response.indexOf("STATUS=OK") == -1)
+            // throws WeekProgramUploadException(response);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) { // Gets thrown by the toXML()
+            // function.
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null)
+                    out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
      * Returns the switches for a particular day
      * @param parser
      * @return
@@ -162,10 +213,10 @@ public class HeatingSystem {
         // WeekProgram you need to call getWeekProgram().
         String link = "";
         boolean match = false;
-        String[] valid_names = { "day", "time", "currentTemperature", "targetTemperature",
-                "dayTemperature", "nightTemperature", "weekProgramState" };
-        String[] tag_names = { "current_day", "time", "current_temperature", "target_temperature",
-                "day_temperature", "night_temperature", "week_program_state" };
+        String[] valid_names = {"day", "time", "currentTemperature", "targetTemperature",
+                "dayTemperature", "nightTemperature", "weekProgramState"};
+        String[] tag_names = {"current_day", "time", "current_temperature", "target_temperature",
+                "day_temperature", "night_temperature", "week_program_state"};
         int i;
         for (i = 0; i < valid_names.length; i++) {
             if (attribute_name.equalsIgnoreCase(valid_names[i])) {
@@ -270,7 +321,7 @@ public class HeatingSystem {
         HttpURLConnection connect = (HttpURLConnection) url.openConnection();
         connect.setReadTimeout(HeatingSystem.TIME_OUT);
         connect.setConnectTimeout(HeatingSystem.TIME_OUT);
-        connect.setRequestProperty("Content-Type","application/xml");
+        connect.setRequestProperty("Content-Type", "application/xml");
         connect.setRequestMethod(type);
         if (type.equalsIgnoreCase("GET")) {
             connect.setDoInput(true);
@@ -320,8 +371,8 @@ public class HeatingSystem {
 
         String link = "";
         boolean match = false;
-        String[] valid_names = { "day", "time", "currentTemperature", "targetTemperature",
-                "dayTemperature", "nightTemperature", "weekProgramState" };
+        String[] valid_names = {"day", "time", "currentTemperature", "targetTemperature",
+                "dayTemperature", "nightTemperature", "weekProgramState"};
         for (int i = 0; i < valid_names.length; i++) {
             if (attribute_name.equalsIgnoreCase(valid_names[i])) {
                 match = true;
@@ -338,8 +389,8 @@ public class HeatingSystem {
         String tag_name = "";
         if (attribute_name.equals("day")) {
             tag_name = "current_day";
-            String[] valid_days = { "Monday", "Tuesday", "Wednesday",
-                    "Thursday", "Friday", "Saturday", "Sunday" };
+            String[] valid_days = {"Monday", "Tuesday", "Wednesday",
+                    "Thursday", "Friday", "Saturday", "Sunday"};
             for (int i = 0; i < valid_days.length; i++) {
                 if (value.equalsIgnoreCase(valid_days[i])) {
                     // Do not make it case-sensitive but adjust to the name with
@@ -413,58 +464,6 @@ public class HeatingSystem {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
-        }
-    }
-
-    /**
-     * Uploading the updated or adjusted week program to the server
-     * @param wpg
-     */
-    public static void setWeekProgram(WeekProgram wpg) {
-        DataOutputStream out = null;
-        try {
-            String xml_output = wpg.toXML();
-            System.out.println("Link: " + HeatingSystem.WEEK_PROGRAM_ADDRESS);
-            HttpURLConnection connect = getHttpConnection(
-                    HeatingSystem.WEEK_PROGRAM_ADDRESS, "PUT");
-
-            out = new DataOutputStream(connect.getOutputStream());
-            out.writeBytes(xml_output);
-            out.flush();
-
-            // Check the response Code it may be the case that we retrieve an
-            // error, because the XML format is wrong.
-            String response = connect.getResponseMessage();
-            int responseCode = connect.getResponseCode();
-            System.out.println("Http Response: " + response);
-
-            System.out.println("Http Response Code: " + responseCode);
-
-            if (responseCode != 200) {
-                InputStream err = connect.getErrorStream();
-                BufferedReader err_read = new BufferedReader(
-                        new InputStreamReader(err));
-                String errInput;
-                while ((errInput = err_read.readLine()) != null) {
-                    System.out.println("ErrorStream: " + errInput);
-                }
-                err.close(); // Close the Error Stream.
-                err_read.close();
-            }
-            // if(response.indexOf("STATUS=OK") == -1)
-            // throws WeekProgramUploadException(response);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NullPointerException e) { // Gets thrown by the toXML()
-            // function.
-            e.printStackTrace();
-        } finally {
-            try {
-                if (out != null)
-                    out.close();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
     }

@@ -11,19 +11,18 @@ import android.view.View.OnTouchListener;
  * It cyclically runs a clickListener, emulating keyboard-like behaviour. First
  * click is fired immediately, next one after the initialInterval, and subsequent
  * ones after the normalInterval.
- *
+ * <p>
  * <p>Interval is scheduled after the onClick completes, so it has to run fast.
  * If it runs slow, it does not generate skipped onClicks. Can be rewritten to
  * achieve this.
  */
 public class RepeatListener implements OnTouchListener {
 
-    private Handler handler = new Handler();
-
-    private int initialInterval;
     private final int normalInterval;
     private final OnClickListener clickListener;
-
+    private Handler handler = new Handler();
+    private int initialInterval;
+    private View downView;
     private Runnable handlerRunnable = new Runnable() {
         @Override
         public void run() {
@@ -32,14 +31,12 @@ public class RepeatListener implements OnTouchListener {
         }
     };
 
-    private View downView;
-
     /**
      * @param initialInterval The interval after first click event
-     * @param normalInterval The interval after second and subsequent click
-     *       events
-     * @param clickListener The OnClickListener, that will be called
-     *       periodically
+     * @param normalInterval  The interval after second and subsequent click
+     *                        events
+     * @param clickListener   The OnClickListener, that will be called
+     *                        periodically
      */
     public RepeatListener(int initialInterval, int normalInterval,
                           OnClickListener clickListener) {

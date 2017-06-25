@@ -9,12 +9,12 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class FragmentSettings extends Fragment {
 
-    Button getdata, putdata;
-    TextView data1, data2;
+    Button putdata;
     String getParam, oldv, newv;
     int dayTempVal, nightTempVal;
     int savedDayTempVal, savedNightTempVal;
@@ -64,9 +64,9 @@ public class FragmentSettings extends Fragment {
                             dayTemp.setText((savedDayTempVal + 50) / 10.0 + " \u2103");
                             nightTemp.setText((savedNightTempVal + 50) / 10.0 + " \u2103");
                             savedDayTemp.setText(getString(R.string.daytemp) + " " + (dayTempVal + 50) / 10.0 + " \u2103");
-                            savedNightTemp.setText(getString(R.string.nighttemp) + " " +  (nightTempVal+50)/10.0 + " \u2103");
-                            setButtonColor(saveDay,1,1);
-                            setButtonColor(saveNight,1,1);
+                            savedNightTemp.setText(getString(R.string.nighttemp) + " " + (nightTempVal + 50) / 10.0 + " \u2103");
+                            setButtonColor(saveDay, 1, 1);
+                            setButtonColor(saveNight, 1, 1);
                         }
                     });
 
@@ -161,8 +161,14 @@ public class FragmentSettings extends Fragment {
                                 @Override
                                 public void run() {
                                     savedDayTemp.setText(getString(R.string.daytemp) + " " + (dayTempVal + 50) / 10.0 + " \u2103");
-                                    setButtonColor(saveDay,1,1);
+                                    setButtonColor(saveDay, 1, 1);
                                     savedDayTempVal = dayTempVal;
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(getActivity(), getResources().getString(R.string.saved), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
                                 }
                             });
 
@@ -185,8 +191,14 @@ public class FragmentSettings extends Fragment {
                                 @Override
                                 public void run() {
                                     savedNightTemp.setText(getString(R.string.nighttemp) + " " + (nightTempVal + 50) / 10.0 + " \u2103");
-                                    setButtonColor(saveNight,1,1);
+                                    setButtonColor(saveNight, 1, 1);
                                     savedNightTempVal = nightTempVal;
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(getActivity(), getResources().getString(R.string.saved), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
                                 }
                             });
                         } catch (Exception e) {
@@ -272,17 +284,10 @@ public class FragmentSettings extends Fragment {
 
                             //Upload the updated program
                             HeatingSystem.setWeekProgram(wpg);
-
-                            data1.post(new Runnable() {
+                            getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    data1.setText(oldv);
-                                }
-                            });
-                            data2.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    data2.setText(newv);
+                                    Toast.makeText(getActivity(), "Week schedule has been reset", Toast.LENGTH_SHORT).show();
                                 }
                             });
 

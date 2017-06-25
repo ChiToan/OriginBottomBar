@@ -1,6 +1,5 @@
 /**
  * @author HTI students, Spring 2013, adjusted by N.Stash
- *
  */
 package com.example.s165097.originbottombar;
 
@@ -9,12 +8,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WeekProgram {
+    public static String[] valid_days = {"Monday", "Tuesday", "Wednesday",
+            "Thursday", "Friday", "Saturday", "Sunday"};
     /* Switches are stored in a hashmap, mapping every day to its
     corresponding set of switches */
     public Map<String, ArrayList<Switch>> data = new HashMap<String, ArrayList<Switch>>();
     private int[] nr_switches_active;
-    public static String[] valid_days = { "Monday", "Tuesday", "Wednesday",
-            "Thursday", "Friday", "Saturday", "Sunday" };
 
     /**
      * Constructor
@@ -43,7 +42,7 @@ public class WeekProgram {
             this.data.get(day).add(new Switch("day", false, "00:00"));
             this.data.get(day).add(new Switch("day", false, "00:00"));
         }
-		/* Create the default switches settings*/
+        /* Create the default switches settings*/
         set_durations();
     }
 
@@ -84,11 +83,11 @@ public class WeekProgram {
 
     public boolean duplicates(ArrayList<Switch> switches) {
         boolean duplicatesFound = false;
-        for (int i = 0; i < (switches.size() - 2) &&!duplicatesFound ; i++) {
-            for (int j = i+1; j < switches.size() - 1; j++) {
-                if ( switches.get(i).getState() && switches.get(j).getState() &&
+        for (int i = 0; i < (switches.size() - 2) && !duplicatesFound; i++) {
+            for (int j = i + 1; j < switches.size() - 1; j++) {
+                if (switches.get(i).getState() && switches.get(j).getState() &&
                         switches.get(i).getType().equals(switches.get(j).getType()) &&
-                        switches.get(i).getTime().equals(switches.get(j).getTime()) ) {
+                        switches.get(i).getTime().equals(switches.get(j).getTime())) {
                     duplicatesFound = true;
                     break;
                 }
@@ -98,25 +97,25 @@ public class WeekProgram {
     }
 
     ////////////
-        public void check_duplicates(ArrayList<Switch> new_switches) {
-            for (int i = 0; i < new_switches.size() - 1; i++) {
-                if (new_switches.get(i).getState()
-                        && new_switches.get(i + 1).getState())
-                    if (new_switches.get(i).getType() == new_switches.get(i + 1)
-                            .getType()) {
-                        for (int j = i + 1; j < new_switches.size() - 1; j++)
-                            new_switches.set(j, new_switches.get(j + 1));
-                        if (new_switches.get(new_switches.size() - 2).getType()
-                                .equalsIgnoreCase("day"))
-                            new_switches.set(new_switches.size() - 1, new Switch(
-                                    "night", false, "23:00"));
-                        else
-                            new_switches.set(new_switches.size() - 1, new Switch(
-                                    "day", false, "23:00"));
-                        i -= 1;
-                    }
-            }
-        }////////////
+    public void check_duplicates(ArrayList<Switch> new_switches) {
+        for (int i = 0; i < new_switches.size() - 1; i++) {
+            if (new_switches.get(i).getState()
+                    && new_switches.get(i + 1).getState())
+                if (new_switches.get(i).getType() == new_switches.get(i + 1)
+                        .getType()) {
+                    for (int j = i + 1; j < new_switches.size() - 1; j++)
+                        new_switches.set(j, new_switches.get(j + 1));
+                    if (new_switches.get(new_switches.size() - 2).getType()
+                            .equalsIgnoreCase("day"))
+                        new_switches.set(new_switches.size() - 1, new Switch(
+                                "night", false, "23:00"));
+                    else
+                        new_switches.set(new_switches.size() - 1, new Switch(
+                                "day", false, "23:00"));
+                    i -= 1;
+                }
+        }
+    }////////////
 
     public void set_durations() {
         for (int i = 0; i < valid_days.length; i++) {

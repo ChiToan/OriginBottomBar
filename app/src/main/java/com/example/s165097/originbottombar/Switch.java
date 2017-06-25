@@ -14,6 +14,7 @@ public class Switch {
 
     /**
      * Constructor
+     *
      * @param type
      * @param state
      * @param time
@@ -48,73 +49,10 @@ public class Switch {
         this.dur = dur;
     }
 */
-    /** GET Methods */
-
-    public String getType() {
-        return this.type;
-    }
-
-    public boolean getState() {
-        return this.state;
-    }
-
-    public String getTime() {
-        return this.time;
-    }
-
-    public int getTime_Int() {
-        return this.time_int;
-    }
-
-    public int getDur() {
-        return this.dur;
-    }
-
-    /** SET Methods */
-    public void setType(String type) {
-        // Do a dimension check.
-        if (type.equals("day") || type.equals("night"))
-            this.type = type;
-    }
-
-    public void setDur(int dur) {
-        this.dur = dur;
-    }
-
-    public void setState(boolean s) {
-        this.state = s;
-    }
-
-    public void setTime(String t) {
-        // Do a dimension check.
-        if (Switch.isValidTimeSyntax(t)) {
-            this.time = t;
-            String front = t.substring(0, 2); // Get the first 2 digits if they
-            // are there.
-            String back = t.substring(3, 5); // Get the last 2 digits if they
-            // are there.
-            int front_int = Integer.parseInt(front);
-            int back_int = Integer.parseInt(back);
-            this.time_int = front_int * 100
-                    + (int) ((float) back_int / 60.0 * 100.0);
-        }
-    }
-
-    /**
-     * Converts the objects properties to the appropriate XML string format
-     * @return
-     */
-    public String toXMLString() {
-        String status = "off";
-        if (this.state)
-            status = "on";
-
-        return ("<switch type=\"" + this.type + "\" state=\"" + status + "\">"
-                + this.time + "</switch>");
-    }
 
     /**
      * Checks whether the syntax for time is correct
+     *
      * @param t
      * @return
      */
@@ -143,6 +81,76 @@ public class Switch {
             }
         }
         return success;
+    }
+
+    /**
+     * GET Methods
+     */
+
+    public String getType() {
+        return this.type;
+    }
+
+    /**
+     * SET Methods
+     */
+    public void setType(String type) {
+        // Do a dimension check.
+        if (type.equals("day") || type.equals("night"))
+            this.type = type;
+    }
+
+    public boolean getState() {
+        return this.state;
+    }
+
+    public void setState(boolean s) {
+        this.state = s;
+    }
+
+    public String getTime() {
+        return this.time;
+    }
+
+    public void setTime(String t) {
+        // Do a dimension check.
+        if (Switch.isValidTimeSyntax(t)) {
+            this.time = t;
+            String front = t.substring(0, 2); // Get the first 2 digits if they
+            // are there.
+            String back = t.substring(3, 5); // Get the last 2 digits if they
+            // are there.
+            int front_int = Integer.parseInt(front);
+            int back_int = Integer.parseInt(back);
+            this.time_int = front_int * 100
+                    + (int) ((float) back_int / 60.0 * 100.0);
+        }
+    }
+
+    public int getTime_Int() {
+        return this.time_int;
+    }
+
+    public int getDur() {
+        return this.dur;
+    }
+
+    public void setDur(int dur) {
+        this.dur = dur;
+    }
+
+    /**
+     * Converts the objects properties to the appropriate XML string format
+     *
+     * @return
+     */
+    public String toXMLString() {
+        String status = "off";
+        if (this.state)
+            status = "on";
+
+        return ("<switch type=\"" + this.type + "\" state=\"" + status + "\">"
+                + this.time + "</switch>");
     }
 
 /*
