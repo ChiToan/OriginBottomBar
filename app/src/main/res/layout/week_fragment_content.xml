@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:text="@string/noswitchset"
         android:gravity="center"
-        style="@style/TextAppearance.AppCompat.Large"
+        style="@android:style/TextAppearance.DeviceDefault.Large"
         android:layout_alignParentEnd="true" />
 
     <ListView

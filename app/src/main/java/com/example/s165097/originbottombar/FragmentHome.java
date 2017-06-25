@@ -7,12 +7,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.triggertrap.seekarc.SeekArc;
-
-import java.util.Random;
 
 import static java.lang.Thread.currentThread;
 
@@ -110,9 +112,9 @@ public class FragmentHome extends Fragment {
                 try {
                     while (!currentThread().isInterrupted()) {
                         Thread.sleep(1000);
-                        double currentTemperature = (Double.parseDouble(HeatingSystem.get("currentTemperature")) * 10) - 50;
-                        ctemp = (int) currentTemperature;
+                        ctemp = (int) (Double.parseDouble(HeatingSystem.get("currentTemperature")) * 10) - 50;
                         final String getTimeDate = (HeatingSystem.get("day") + " " + HeatingSystem.get("time"));
+                        vtemp = (int) (Double.parseDouble(HeatingSystem.get("targetTemperature"))*10)-50;
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -120,6 +122,7 @@ public class FragmentHome extends Fragment {
                                 curtemp.setText((ctemp + 50) / 10.0 + " \u2103");
                                 showFlame(flame);
                                 timedate.setText(getResources().getString(R.string.lastupdate) + getTimeDate);
+                                seekBar.setProgress(vtemp);
                             }
                         });
                     }
@@ -170,9 +173,9 @@ public class FragmentHome extends Fragment {
                     @Override
                     public void run() {
                         try {
-                            Thread.sleep(500);
                             double targetTemp = (vtemp + 50) / 10.0;
                             HeatingSystem.put("targetTemperature", Double.toString(targetTemp));
+                            Thread.sleep(100);
                         } catch (Exception e) {
                             System.err.println("Error from getdata " + e);
                         }

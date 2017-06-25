@@ -10,69 +10,86 @@
     tools:context=".FragmentSettings">
 
 
+    <!--<android.support.v7.widget.CardView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_margin="8dp"-->
+    <!--app:contentPadding="8dp">-->
+
+    <!--<android.support.constraint.ConstraintLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
+
+    <!--<TableLayout-->
+    <!--android:layout_width="312dp"-->
+    <!--android:layout_height="49dp"-->
+    <!--android:gravity="center"-->
+    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--app:layout_constraintRight_toRightOf="parent"-->
+    <!--app:layout_constraintTop_toTopOf="parent">-->
+
+    <!--<TableRow-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content">-->
+
+    <!--<Button-->
+    <!--android:id="@+id/getdata"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_weight="1"-->
+    <!--android:text="GET Data" />-->
+
+    <!--<Button-->
+    <!--android:id="@+id/putdata"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_weight="1"-->
+    <!--android:text="PUT Data" />-->
+    <!--</TableRow>-->
+
+    <!--<TableRow-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/data1"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_weight="1"-->
+    <!--android:text="getParam"-->
+    <!--android:textAlignment="center" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/data2"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_weight="1"-->
+    <!--android:text="old value"-->
+    <!--android:textAlignment="center" />-->
+
+    <!--</TableRow>-->
+
+    <!--</TableLayout>-->
+
+    <!--</android.support.constraint.ConstraintLayout>-->
+
+    <!--</android.support.v7.widget.CardView>-->
+
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_margin="8dp"
+        android:layout_weight="0.3"
         app:contentPadding="8dp">
 
-        <android.support.constraint.ConstraintLayout
+
+        <Button
+            android:id="@+id/putdata"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TableLayout
-                android:layout_width="312dp"
-                android:layout_height="49dp"
-                android:gravity="center"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <Button
-                        android:id="@+id/getdata"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="GET Data" />
-
-                    <Button
-                        android:id="@+id/putdata"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="PUT Data" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/data1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="getParam"
-                        android:textAlignment="center" />
-
-                    <TextView
-                        android:id="@+id/data2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="old value"
-                        android:textAlignment="center" />
-
-                </TableRow>
-
-            </TableLayout>
-
-        </android.support.constraint.ConstraintLayout>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Reset week schedule" />
 
     </android.support.v7.widget.CardView>
 
@@ -93,7 +110,8 @@
                 android:id="@+id/day_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/daytemp" />
+                android:text="@string/daytemp"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
 
             <TextView
                 android:id="@+id/day_temp"
@@ -171,6 +189,7 @@
 
             <TextView
                 android:id="@+id/night_text"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/nighttemp" />

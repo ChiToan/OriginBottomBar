@@ -1,10 +1,6 @@
 package com.example.s165097.originbottombar;
 
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +9,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 public class FragmentSettings extends Fragment {
@@ -202,48 +197,48 @@ public class FragmentSettings extends Fragment {
         });
 
 
-        getdata = (Button) view.findViewById(R.id.getdata);
+//        getdata = (Button) view.findViewById(R.id.getdata);
         putdata = (Button) view.findViewById(R.id.putdata);
-        data1 = (TextView) view.findViewById(R.id.data1);
-        data2 = (TextView) view.findViewById(R.id.data2);
+//        data1 = (TextView) view.findViewById(R.id.data1);
+//        data2 = (TextView) view.findViewById(R.id.data2);
 
         /* When the user clicks on GET Data button the value of the corresponding parameter is read from the server
         and displayed in TextView data1
          */
-        getdata.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                Toast.makeText(getActivity(), "got it", Toast.LENGTH_SHORT).show();
-                // TODO Auto-generated method stub
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        getParam = "";
-                        try {
-                            getParam = HeatingSystem.get("currentTemperature");
-
-                            HeatingSystem.get("day");
-                            HeatingSystem.get("time");
-                            HeatingSystem.get("targetTemperature");
-                            HeatingSystem.get("dayTemperature");
-                            HeatingSystem.get("nightTemperature");
-                            HeatingSystem.get("weekProgramState");
-
-                            data1.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    data1.setText(getParam);
-                                }
-                            });
-                        } catch (Exception e) {
-                            System.err.println("Error from getdata " + e);
-                        }
-                    }
-                }).start();
-            }
-        });
+//        getdata.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//
+//                Toast.makeText(getActivity(), "got it", Toast.LENGTH_SHORT).show();
+//                // TODO Auto-generated method stub
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        getParam = "";
+//                        try {
+//                            getParam = HeatingSystem.get("currentTemperature");
+//
+//                            HeatingSystem.get("day");
+//                            HeatingSystem.get("time");
+//                            HeatingSystem.get("targetTemperature");
+//                            HeatingSystem.get("dayTemperature");
+//                            HeatingSystem.get("nightTemperature");
+//                            HeatingSystem.get("weekProgramState");
+//
+//                            data1.post(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    data1.setText(getParam);
+//                                }
+//                            });
+//                        } catch (Exception e) {
+//                            System.err.println("Error from getdata " + e);
+//                        }
+//                    }
+//                }).start();
+//            }
+//        });
 
         /* When the user clicks on PUT Data button the old value of the corresponding parameter is read from the server
         and displayed in TextView data1, the new uploaded value is displayed in TextView data2
@@ -290,6 +285,7 @@ public class FragmentSettings extends Fragment {
                                     data2.setText(newv);
                                 }
                             });
+
                         } catch (Exception e) {
                             System.err.println("Error from getdata " + e);
                         }

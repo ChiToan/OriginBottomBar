@@ -13,44 +13,50 @@
     <android.support.v7.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_margin="4dp"
+        android:layout_margin="8dp"
         app:contentPadding="8dp">
 
-        <LinearLayout
+        <Button
+            android:id="@+id/putdata"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Reset \n week \n schedule" />
+        <!--<LinearLayout-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:orientation="vertical">-->
 
-            <Button
-                android:id="@+id/getdata"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="GET Data" />
+            <!--<Button-->
+                <!--android:id="@+id/getdata"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:text="GET Data" />-->
 
-            <TextView
-                android:id="@+id/data1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="getParam"
-                android:textAlignment="center" />
+            <!--<TextView-->
+                <!--android:id="@+id/data1"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:text="getParam"-->
+                <!--android:textAlignment="center" />-->
 
-            <Button
-                android:id="@+id/putdata"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="PUT Data" />
+            <!--<Button-->
+                <!--android:id="@+id/putdata"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:text="PUT Data" />-->
 
-            <TextView
-                android:id="@+id/data2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="old value"
-                android:textAlignment="center" />
-        </LinearLayout>
+            <!--<TextView-->
+                <!--android:id="@+id/data2"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:text="old value"-->
+                <!--android:textAlignment="center" />-->
+        <!--</LinearLayout>-->
 
     </android.support.v7.widget.CardView>
 
