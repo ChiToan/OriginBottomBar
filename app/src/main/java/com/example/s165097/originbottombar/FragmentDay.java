@@ -137,7 +137,7 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String strTime = String.format("%02d", picker.getHour()) + ":" + String.valueOf(picker.getMinute());
+                final String strTime = String.format("%02d", picker.getHour()) + ":" + String.format("%02d", picker.getMinute());
 
                 new Thread(new Runnable() {
                     @Override
@@ -154,7 +154,6 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
                                 switchesList.add(strTime + "\t\t\t\t\t\t\t" + getEmojiByUnicode(0x1F319) + "\t\t\tNight");
                             }
                             Collections.sort(switchesList);
-                            Thread.sleep(500);
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -168,7 +167,7 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
                 }).start();
                 listAdapter.clear();
                 try {
-                    TimeUnit.MILLISECONDS.sleep(500);
+                    TimeUnit.MILLISECONDS.sleep(400);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -189,7 +188,6 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
                             HeatingSystem.setWeekProgram(wpg);
                             switchesList.remove(listpos);
                             Collections.sort(switchesList);
-                            Thread.sleep(500);
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -203,7 +201,7 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
                 }).start();
                 listAdapter.clear();
                 try {
-                    TimeUnit.MILLISECONDS.sleep(500);
+                    TimeUnit.MILLISECONDS.sleep(400);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

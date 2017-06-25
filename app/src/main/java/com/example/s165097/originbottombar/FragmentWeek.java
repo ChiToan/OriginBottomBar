@@ -116,7 +116,7 @@ public class FragmentWeek extends Fragment {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String strTime = String.format("%02d", picker.getHour()) + ":" + String.valueOf(picker.getMinute());
+                final String strTime = String.format("%02d", picker.getHour()) + ":" + String.format("%02d", picker.getMinute());
                 final String swType = (dayNightSwitch.isChecked()) ? "night" : "day";
                 final int[] freepos = {0};
 
@@ -151,7 +151,6 @@ public class FragmentWeek extends Fragment {
                                             e.printStackTrace();
                                         }
                                         Toast.makeText(getActivity(), getResources().getString(R.string.saved), Toast.LENGTH_SHORT).show();
-                                        Toast.makeText(getActivity(), strTime, Toast.LENGTH_SHORT).show();
                                         adapter.notifyDataSetChanged();
                                     }
                                 }
