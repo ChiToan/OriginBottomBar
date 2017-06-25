@@ -154,6 +154,7 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
                                 switchesList.add(strTime + "\t\t\t\t\t\t\t" + getEmojiByUnicode(0x1F319) + "\t\t\tNight");
                             }
                             Collections.sort(switchesList);
+                            Thread.sleep(400);
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -188,6 +189,7 @@ public class FragmentDay extends Fragment implements ListView.OnItemClickListene
                             HeatingSystem.setWeekProgram(wpg);
                             switchesList.remove(listpos);
                             Collections.sort(switchesList);
+                            Thread.sleep(400);
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
